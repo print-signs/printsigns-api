@@ -22,12 +22,17 @@ app.use(fileUpload({
     useTempFiles: true
 }));
 
+//auth
 import user from "./routes/userRoute.js"
 app.use("/api", user);
+//category
 import category from "./routes/categoryRoute.js"
 app.use("/api", category);
 //directory
 import directory from "./routes/directoryRoute.js"
 app.use("/api", directory);
+//News
+import news from "./routes/newsRoute.js"
+app.use("/api", news);
 
 export default app;

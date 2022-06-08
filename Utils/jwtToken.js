@@ -15,7 +15,7 @@ const sendToken = (user, statusCode, res) => {
         // res.status(statusCode).json({
 
         success: true,
-        user,
+        // user,
         token,
     });
 };

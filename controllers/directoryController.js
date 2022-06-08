@@ -2,7 +2,6 @@ import directoryModel from "../models/directoryModel.js";
 export const createDirectory = async (req, res) => {
 
     try {
-        console.log("hii")
         const { name,
             phone,
             email,
@@ -17,7 +16,7 @@ export const createDirectory = async (req, res) => {
             LinkedinUrl,
             FacebookUrl,
             InstagramUrl,
-        } = req.body.state;
+        } = req.body;
         // console.log(name)
         const data = await directoryModel.create({
 
@@ -43,7 +42,7 @@ export const createDirectory = async (req, res) => {
             data,
         });
     } catch (error) {
-        console.log(err)
+        console.log(error)
         res.status(500).json({
             success: false,
             msg: "Failled to create !!"
@@ -87,6 +86,37 @@ export const getOneDirectory = async (req, res) => {
         res.status(500).json({
             success: false,
             msg: "Failled to fetch !!"
+        });
+    }
+
+};
+
+export const updateDirectory = async (req, res) => {
+    try {
+        // const newDirectoryData = {
+        //     name: req.body.name,
+        //     // email: req.body.email,
+        // };
+        // console.log(newCategoryData)
+        //req.user.id, 
+        const ModifyDirectory = await directoryModel.findByIdAndUpdate(req.params.id, req.body.state,
+
+            { new: true }
+            // runValidators: true,
+            // useFindAndModify: false,
+        );
+
+        res.status(200).json({
+            success: true,
+            ModifyDirectory
+        });
+
+    } catch (error) {
+        // console.log(error)
+        res.status(500).json({
+            success: false,
+            msg: "Failled to UpDate !!"
+
         });
     }
 

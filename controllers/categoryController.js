@@ -10,7 +10,7 @@ export const createCategory = async (req, res) => {
 
         // console.log(files)
         const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
-            folder: "image",
+            folder: "cmp/image",
         },
             function (error, result) { (result, error) });
         const { name } = req.body;
@@ -76,12 +76,11 @@ export const getOneCategory = async (req, res) => {
 
 };
 
-// 8.update Category
+// 3.update Category
 export const updateCategory = async (req, res) => {
     try {
         const newCategoryData = {
             name: req.body.name,
-            // email: req.body.email,
         };
         const files = req.files.image;
 

@@ -15,7 +15,7 @@ export const registerUser = async (req, res) => {
             password
         });
         // const token = user.getJWTToken();
-        // console.log(token)
+        // // console.log(token)
         // res.status(201).json({
         //     success: true,
         //     token,
