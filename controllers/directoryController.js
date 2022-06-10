@@ -3,15 +3,16 @@ import cloudinary from "cloudinary";
 export const createDirectory = async (req, res) => {
 
     try {
-        let image;
-        // console.log(req.files)
-        if (req.files !== null) {
+        let images;
+        // console.log(req.body)
+        // console.log(req.files.image)
+        if (req.files) {
             const files = req.files.image;
             const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
                 folder: "cmp/image",
             },
                 function (error, result) { (result, error) });
-            image = {
+            images = {
                 public_id: myCloud.public_id,
                 url: myCloud.secure_url,
             }
@@ -32,7 +33,6 @@ export const createDirectory = async (req, res) => {
             FacebookUrl,
             InstagramUrl,
         } = req.body;
-        // console.log(req.body)
         const data = await directoryModel.create({
 
             name,
@@ -49,7 +49,7 @@ export const createDirectory = async (req, res) => {
             LinkedinUrl,
             FacebookUrl,
             InstagramUrl,
-            image: image
+            image: images
 
         });
         res.status(201).json({
