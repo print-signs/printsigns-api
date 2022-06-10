@@ -4,8 +4,8 @@ export const createDirectory = async (req, res) => {
 
     try {
         const files = req.files.image;
-        console.log(req.body)
-        console.log(files)
+        // console.log(req.body)
+        // console.log(files)
         const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
             folder: "cmp/image",
         },
@@ -106,13 +106,30 @@ export const getOneDirectory = async (req, res) => {
 
 export const updateDirectory = async (req, res) => {
     try {
-        // const newDirectoryData = {
-        //     name: req.body.name,
-        //     // email: req.body.email,
-        // };
-        // console.log(newCategoryData)
-        //req.user.id, 
-        const ModifyDirectory = await directoryModel.findByIdAndUpdate(req.params.id, req.body.state,
+        const newDirectoryData = {
+            ...req.body,
+        };
+        const files = req.files.image;
+
+        if (req.files.image !== "") {
+            const dir = await directoryModel.findById(req.params.id);
+            if (dir.image.public_id) {
+                const imageId = dir.image.public_id;
+                // console.log(imageId)
+                //delete image from claudinary
+                await cloudinary.uploader.destroy(imageId)
+
+                const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
+                    folder: "image",
+                },
+                    function (error, result) { (result, error) });
+                newDirectoryData.image = {
+                    public_id: myCloud.public_id,
+                    url: myCloud.secure_url,
+                };
+            }
+        }
+        const ModifyDirectory = await directoryModel.findByIdAndUpdate(req.params.id, newDirectoryData,
 
             { new: true }
             // runValidators: true,
@@ -138,6 +155,14 @@ export const updateDirectory = async (req, res) => {
 export const deleteOneDirectory = async (req, res) => {
 
     try {
+        //delete image from cloudinary(if image exist)
+        const dir = await directoryModel.findById(req.params.id);
+        // console.log(categ)
+        if (dir.image.public_id) {
+            const imageId = dir.image.public_id;
+            await cloudinary.uploader.destroy(imageId)
+        }
+
         const directory = await directoryModel.findByIdAndDelete(req.params.id)
         if (!directory) {
             return res.status(400).json({ message: 'Directory Not Found' });
