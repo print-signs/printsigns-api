@@ -3,13 +3,19 @@ import cloudinary from "cloudinary";
 export const createDirectory = async (req, res) => {
 
     try {
-        const files = req.files.image;
-        // console.log(req.body)
-        // console.log(files)
-        const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
-            folder: "cmp/image",
-        },
-            function (error, result) { (result, error) });
+        let image;
+        // console.log(req.files)
+        if (req.files !== null) {
+            const files = req.files.image;
+            const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
+                folder: "cmp/image",
+            },
+                function (error, result) { (result, error) });
+            image = {
+                public_id: myCloud.public_id,
+                url: myCloud.secure_url,
+            }
+        }
         const {
             name,
             phone,
@@ -43,10 +49,7 @@ export const createDirectory = async (req, res) => {
             LinkedinUrl,
             FacebookUrl,
             InstagramUrl,
-            image: {
-                public_id: myCloud.public_id,
-                url: myCloud.secure_url,
-            },
+            image: image
 
         });
         res.status(201).json({
