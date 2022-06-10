@@ -106,30 +106,14 @@ export const getOneDirectory = async (req, res) => {
 
 export const updateDirectory = async (req, res) => {
     try {
-        const newDirectoryData = {
-            ...req.body,
-        };
-        const files = req.files.image;
+        // const newDirectoryData = {
+        //     name: req.body.name,
+        //     // email: req.body.email,
+        // };
+        // console.log(newCategoryData)
+        //req.user.id, 
 
-        if (req.files.image !== "") {
-            const dir = await directoryModel.findById(req.params.id);
-            if (dir.image.public_id) {
-                const imageId = dir.image.public_id;
-                // console.log(imageId)
-                //delete image from claudinary
-                await cloudinary.uploader.destroy(imageId)
-
-                const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
-                    folder: "image",
-                },
-                    function (error, result) { (result, error) });
-                newDirectoryData.image = {
-                    public_id: myCloud.public_id,
-                    url: myCloud.secure_url,
-                };
-            }
-        }
-        const ModifyDirectory = await directoryModel.findByIdAndUpdate(req.params.id, newDirectoryData,
+        const ModifyDirectory = await directoryModel.findByIdAndUpdate(req.params.id, req.body,
 
             { new: true }
             // runValidators: true,
@@ -142,7 +126,7 @@ export const updateDirectory = async (req, res) => {
         });
 
     } catch (error) {
-        // console.log(error)
+        console.log(error)
         res.status(500).json({
             success: false,
             msg: "Failled to UpDate !!"
