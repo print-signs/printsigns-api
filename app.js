@@ -34,5 +34,8 @@ app.use("/api", directory);
 //News
 import news from "./routes/newsRoute.js"
 app.use("/api", news);
+//Events
+import Event from "./routes/EventsRoute.js"
+app.use("/api", Event);
 
 export default app;
