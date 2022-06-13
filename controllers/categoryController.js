@@ -82,9 +82,10 @@ export const updateCategory = async (req, res) => {
         const newCategoryData = {
             name: req.body.name,
         };
-        const files = req.files.image;
 
-        if (req.files.image !== "") {
+
+        if (req.files) {
+
             const categ = await Category.findById(req.params.id);
 
             const imageId = categ.image.public_id;
@@ -92,6 +93,7 @@ export const updateCategory = async (req, res) => {
             //delete image from claudinary
             await cloudinary.uploader.destroy(imageId)
             // await cloudinary.uploader.destroy(imageId, function (result) { console.log(result) });
+            const files = req.files.image;
             const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
                 folder: "image",
             },

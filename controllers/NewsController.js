@@ -84,10 +84,11 @@ export const updateNews = async (req, res) => {
             title: req.body.title,
             description: req.body.description,
         };
-        console.log()
-        const files = req.files.image;
+        //console.log(req.files)
 
-        if (req.files.image !== "") {
+        if (req.files) {
+            const files = req.files.image;
+
             const newsImage = await News.findById(req.params.id);
 
             const imgId = newsImage.image.public_id;
@@ -105,6 +106,7 @@ export const updateNews = async (req, res) => {
                 url: myCloud.secure_url,
             };
         }
+        console.log(newNewsData)
         //req.user.id, 
         const ModifyNews = await News.findByIdAndUpdate(req.params.id, newNewsData,
 
@@ -119,7 +121,7 @@ export const updateNews = async (req, res) => {
         });
 
     } catch (error) {
-        // console.log(error)
+        console.log(error)
         res.status(500).json({
             success: false,
             msg: "Failled to UpDate !!"

@@ -86,9 +86,10 @@ export const updateEvent = async (req, res) => {
             description: req.body.description,
             location: req.body.location,
         };
-        const files = req.files.image;
 
-        if (req.files.image !== "") {
+
+        if (req.files) {
+            const files = req.files.image;
             const getEvent = await Events.findById(req.params.id);
 
             const imageId = getEvent.image.public_id;
