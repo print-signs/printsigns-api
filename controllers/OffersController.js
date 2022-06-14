@@ -1,9 +1,7 @@
-import Events from "../models/EventsModel.js"
+import Offers from "../models/OffersModel.js"
 import cloudinary from "cloudinary";
-// import cloudinary from "../Utils/cloudinary.js"
-//import { v2 as cloudinary } from 'cloudinary'
 
-export const createEvent = async (req, res) => {
+export const createOffer = async (req, res) => {
 
     try {
         const files = req.files.image;
@@ -13,41 +11,42 @@ export const createEvent = async (req, res) => {
             folder: "cmp/image",
         },
             function (error, result) { (result, error) });
-        const { title, location, description } = req.body;
+        const { title, location, description, bisunessName } = req.body;
 
-        const data = await Events.create({
+        const data = await Offers.create({
             title,
             image: {
                 public_id: myCloud.public_id,
                 url: myCloud.secure_url,
             },
             location,
-            description
+            description,
+            bisunessName
 
         });
         res.status(201).json({
             success: true,
-            msg: " create Event Successfully!!",
+            msg: " create Offer Successfully!!",
             data,
         });
     } catch (error) {
         res.status(500).json({
             success: false,
-            msg: "Failled to create Event !!"
+            msg: "Failled to create Offer !!"
         });
     }
 
 };
 //get All Product
-export const getAllEvent = async (req, res) => {
+export const getAllOffer = async (req, res) => {
 
     try {
-        const Event = await Events.find();
+        const offer = await Offers.find();
         // console.log(category)
         res.status(200).json({
             success: true,
-            msg: " fetch  Successfully!!",
-            Event,
+            msg: " fetch All Offer Successfully!!",
+            offer,
         });
     } catch (error) {
         res.status(500).json({
@@ -58,15 +57,15 @@ export const getAllEvent = async (req, res) => {
 
 };
 //get One Product
-export const getOneEvent = async (req, res) => {
+export const getOneOffer = async (req, res) => {
 
     try {
-        const Event = await Events.findById(req.params.id);
+        const offer = await Offers.findById(req.params.id);
         // console.log(category)
         res.status(200).json({
             success: true,
             msg: " fetch  Successfully!!",
-            Event,
+            offer,
         });
     } catch (error) {
         // console.log(error)
@@ -78,21 +77,22 @@ export const getOneEvent = async (req, res) => {
 
 };
 
-// 3.update Event
-export const updateEvent = async (req, res) => {
+// 3.update offer
+export const updateOffer = async (req, res) => {
     try {
-        const newEventData = {
+        const newOfferData = {
             title: req.body.title,
             description: req.body.description,
             location: req.body.location,
+            bisunessName: req.body.bisunessName
         };
 
 
         if (req.files) {
             const files = req.files.image;
-            const getEvent = await Events.findById(req.params.id);
+            const getOffer = await Offers.findById(req.params.id);
 
-            const imageId = getEvent.image.public_id;
+            const imageId = getOffer.image.public_id;
             // console.log(imageId)
             //delete image from claudinary
             await cloudinary.uploader.destroy(imageId)
@@ -102,14 +102,14 @@ export const updateEvent = async (req, res) => {
             },
                 function (error, result) { (result, error) });
             // console.log(myCloud)
-            newEventData.image = {
+            newOfferData.image = {
                 public_id: myCloud.public_id,
                 url: myCloud.secure_url,
             };
         }
-        // console.log(newCategoryData)
+
         //req.user.id, 
-        const ModifyEvent = await Events.findByIdAndUpdate(req.params.id, newEventData,
+        const ModifyOffer = await Offers.findByIdAndUpdate(req.params.id, newOfferData,
 
             { new: true }
             // runValidators: true,
@@ -118,14 +118,14 @@ export const updateEvent = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            ModifyEvent
+            ModifyOffer
         });
 
     } catch (error) {
-        // console.log(error)
+        console.log(error)
         res.status(500).json({
             success: false,
-            msg: "Failled to UpDate Event!!"
+            msg: "Failled to UpDate Offer!!"
 
         });
     }
@@ -133,30 +133,30 @@ export const updateEvent = async (req, res) => {
 };
 
 //delete one category
-export const deleteEvent = async (req, res) => {
+export const deleteOffer = async (req, res) => {
 
     try {
         //delete image from cloudinary
-        const getEvent = await Events.findById(req.params.id);
+        const getOffer = await Offers.findById(req.params.id);
         // console.log(categ)
-        const imageId = getEvent.image.public_id;
+        const imageId = getOffer.image.public_id;
         await cloudinary.uploader.destroy(imageId)
 
         //-------------------------//
-        const event = await Events.findByIdAndDelete(req.params.id)
-        if (!event) {
-            return res.status(400).json({ message: 'Event Not Found' });
+        const offer = await Offers.findByIdAndDelete(req.params.id)
+        if (!offer) {
+            return res.status(400).json({ message: 'Offer Not Found' });
         }
-        await event.remove();
+        await offer.remove();
         res.status(200).json({
             success: true,
-            msg: "Event Deleted Successfully!!",
+            msg: "Offer Deleted Successfully!!",
             // category,
         });
     } catch (error) {
         res.status(500).json({
             success: false,
-            msg: "Failled to Delete event !!"
+            msg: "Failled to Delete Offer !!"
         });
     }
 

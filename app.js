@@ -37,5 +37,7 @@ app.use("/api", news);
 //Events
 import Event from "./routes/EventsRoute.js"
 app.use("/api", Event);
-
+//Offers
+import Offer from "./routes/OffersRoute.js"
+app.use("/api", Offer);
 export default app;
