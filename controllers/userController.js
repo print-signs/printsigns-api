@@ -1,9 +1,9 @@
 //require("dotenv").config({ path: "backend/config/config.env" });
-import ErrorHander from "../utils/errorhander.js"
+import ErrorHander from "../Utils/errorhander.js"
 import catchAsyncErrors from "../middlewares/catchAsyncErrors.js"
 import User from "../models/userModel.js"
-import sendToken from "../utils/jwtToken.js"
-import sendEmail from "../utils/sendEmail.js"
+import sendToken from "../Utils/jwtToken.js"
+import sendEmail from "../Utils/sendEmail.js"
 import crypto from "crypto"
 import cloudinary from "cloudinary"
 
