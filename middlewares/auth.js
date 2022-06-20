@@ -1,6 +1,6 @@
 import User from "../models/userModel.js";
 import jwt from "jsonwebtoken";
-import ErrorHander from "../utils/errorhander.js"
+import ErrorHander from "../Utils/errorhander.js"
 
 export const isAuthenticatedUser = async (req, res, next) => {
     try {
