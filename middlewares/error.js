@@ -1,4 +1,4 @@
-import ErrorHandler from "../utils/errorhander.js";
+import ErrorHandler from "../Utils/errorhander.js";
 
 
 module.exports = (err, req, res, next) => {
