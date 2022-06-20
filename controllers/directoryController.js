@@ -4,11 +4,11 @@ export const createDirectory = async (req, res) => {
 
     try {
         let images;
-        console.log(req.body)
-        console.log(req.files)
+        // console.log(req.body)
+        // console.log(req.body.image)
         if (req.files) {
             const files = req.files.image;
-            console.log(files)
+            // console.log(files)
             const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
                 folder: "cmp/image",
             },

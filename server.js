@@ -8,7 +8,7 @@ import cloudinary from "cloudinary"
 // Connecting to database
 connectDatabase();
 
-// console.log(process.env.CLOUDINARY_API_KEY)
+//console.log(process.env.CLOUDINARY_API_KEY)
 //cloudenary uses
 cloudinary.config({
     cloud_name: process.env.CLOUDINARY_NAME,

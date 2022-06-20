@@ -40,4 +40,7 @@ app.use("/api", Event);
 //Offers
 import Offer from "./routes/OffersRoute.js"
 app.use("/api", Offer);
+//Offers
+import banner from "./routes/bannerRoute.js"
+app.use("/api", banner);
 export default app;
