@@ -1,14 +1,16 @@
 import User from "../models/userModel.js";
 import jwt from "jsonwebtoken";
+import ErrorHander from "../utils/errorhander.js"
 
-export const isAuthenticated = async (req, res, next) => {
+export const isAuthenticatedUser = async (req, res, next) => {
     try {
-        // const { token } = req.cookies;
-        const getToken = req.headers;
+        const { token } = req.cookies;
+        //const getToken = req.headers;
         // // console.log(getToken.authorization)
+        // console.log(token)
 
         // //remove Bearer from token
-        const token = getToken.authorization.slice(7);
+        // const token = getToken.authorization.slice(7);
         // // console.log(token)
 
         if (!token) {
@@ -32,4 +34,18 @@ export const isAuthenticated = async (req, res, next) => {
             message: error.message,
         });
     }
+};
+export const authorizeRoles = (...roles) => {//pass admin
+    return (req, res, next) => {
+        if (!roles.includes(req.user.role)) {
+            return next(
+                new ErrorHander(
+                    `Role: ${req.user.role} is not allowed to access this resouce `,
+                    403
+                )
+            );
+        }
+
+        next();
+    };
 };

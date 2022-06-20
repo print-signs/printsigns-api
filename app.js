@@ -24,7 +24,7 @@ app.use(fileUpload({
 
 //auth
 import user from "./routes/userRoute.js"
-app.use("/api", user);
+app.use("/api/v1/", user);
 //category
 import category from "./routes/categoryRoute.js"
 app.use("/api", category);

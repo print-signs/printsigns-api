@@ -1,129 +1,227 @@
-
+//require("dotenv").config({ path: "backend/config/config.env" });
+import ErrorHander from "../utils/errorhander.js"
+import catchAsyncErrors from "../middlewares/catchAsyncErrors.js"
 import User from "../models/userModel.js"
-import sendToken from "../Utils/jwtToken.js"
-// 1.Register a User
-export const registerUser = async (req, res) => {
-    try {
-        const { name, email, password, confirmPassword } = req.body;
-        // console.log(name)
-        if (password !== confirmPassword) {
-            res.status(401).json({ msg: "Password not Match!!" })
-        }
-        const user = await User.create({
-            name,
-            email,
-            password
-        });
-        // const token = user.getJWTToken();
-        // // console.log(token)
-        // res.status(201).json({
-        //     success: true,
-        //     token,
-        // })
-        sendToken(user, 201, res);
+import sendToken from "../utils/jwtToken.js"
+import sendEmail from "../utils/sendEmail.js"
+import crypto from "crypto"
+import cloudinary from "cloudinary"
 
-    } catch (error) {
-        console.log(error)
-        res.status(500).json({
-            success: false,
-            msg: "Failled to register !!"
-        });
-    }
-};
+// 1.Register a User
+export const registerUser = catchAsyncErrors(async (req, res, next) => {
+    const files = req.files.avatar;
+    const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
+        folder: "cmp-user/image",
+    },
+        function (error, result) { (result, error) });
+
+    const { name, email, password, phone } = req.body;
+
+    const user = await User.create({
+        name,
+        email,
+        password,
+        phone,
+        avatar: {
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
+        },
+    });
+    sendToken(user, 201, res);
+});
 
 // 2.Login User
-export const loginUser = async (req, res) => {
-    try {
-        const { email, password } = req.body;
+export const loginUser = catchAsyncErrors(async (req, res, next) => {
+    const { email, password } = req.body;
 
-        // checking if user has given password and email both
+    // checking if user has given password and email both
 
-        if (!email || !password) {
-            res.status(400).json({ msg: "Please Enter Email & Password" })
-        }
-
-        const user = await User.findOne({ email }).select("+password");
-
-        if (!user) {
-            res.status(401).json({ msg: "Invalid email or password" })
-        }
-
-        const isPasswordMatched = await user.comparePassword(password);
-
-        if (!isPasswordMatched) {
-            res.status(401).json({ msg: "Invalid email or password" })
-        }
-        // const token = user.getJWTToken();
-        // res.status(201).json({
-        //     success: true,
-        //     token,
-        // })
-        sendToken(user, 200, res);
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            msg: "Failled to Login !!"
-        });
+    if (!email || !password) {
+        return next(new ErrorHander("Please Enter Email & Password", 400));
     }
 
-};
+    const user = await User.findOne({ email }).select("+password");
+
+    if (!user) {
+        return next(new ErrorHander("Invalid email or password", 401));
+    }
+
+    const isPasswordMatched = await user.comparePassword(password);
+
+    if (!isPasswordMatched) {
+        return next(new ErrorHander("Invalid email or password", 401));
+    }
+    // const token = user.getJWTToken();
+    // res.status(201).json({
+    //     success: true,
+    //     token,
+    // })
+    sendToken(user, 200, res);
+});
 
 
 // 3.Logout User
-export const logout = async (req, res) => {
+export const logout = catchAsyncErrors(async (req, res, next) => {
+    res.cookie("token", null, {
+        expires: new Date(Date.now()),
+        httpOnly: true,
+    });
+
+    res.status(200).json({
+        success: true,
+        message: "Logged Out",
+    });
+});
+
+
+// 4.Forgot Password
+
+export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
+    const user = await User.findOne({ email: req.body.email });
+
+    if (!user) {
+        return next(new ErrorHander("User not found", 404));
+    }
+    // Get ResetPassword Token
+    const resetToken = user.getResetPasswordToken();//call function
+
+    //save database reset token
+    await user.save({ validateBeforeSave: false });
+    //create link for send mail
+    // const resetPasswordUrl = `http://localhost:5000/api/v1/user/password/reset/${resetToken}` //send from localhost
+    //send from anyhost
+    const resetPasswordUrl = `${req.protocol}://${req.get(
+        "host"
+    )}/api/v1/user/password/reset/${resetToken}`;
+    //const resetPasswordUrl = `${process.env.FRONTEND_URL}:/api/user/password/reset/${resetToken}`;
+    //const resetPasswordUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
+
+
+    const message = `Your password reset token are :- \n\n ${resetPasswordUrl} \n\nIf you have not requested this email then, please ignore it.`;
+
     try {
-        res.cookie("token", null, {
-            expires: new Date(Date.now()),
-            httpOnly: true,
+        await sendEmail({
+            email: user.email,
+            subject: `CMP Password Recovery`,
+            message,
         });
 
         res.status(200).json({
             success: true,
-            message: "Logged Out",
+            message: `Email sent to ${user.email} successfully`,
         });
     } catch (error) {
-        res.status(500).json({
-            success: false,
-            msg: "Failled to logOut !!"
-        });
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+
+        await user.save({ validateBeforeSave: false });
+
+        return next(new ErrorHander(error.message, 500));
+    }
+});
+
+
+// 5.Reset Password
+export const resetPassword = catchAsyncErrors(async (req, res, next) => {
+    // creating token hash
+    const resetPasswordToken = crypto
+        .createHash("sha256")
+        .update(req.params.token)
+        .digest("hex");
+
+    const user = await User.findOne({
+        resetPasswordToken,
+        resetPasswordExpire: { $gt: Date.now() },
+    });
+
+    if (!user) {
+        return next(
+            new ErrorHander(
+                "Reset Password Token is invalid or has been expired",
+                400
+            )
+        );
+    }
+    //replace previous password 
+    if (req.body.password !== req.body.confirmPassword) {
+        return next(new ErrorHander("Password does not password", 400));
     }
 
+    user.password = req.body.password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
 
-};
+    await user.save();
 
+    sendToken(user, 200, res);
+});
 
-// 4.update User password
-export const updatePassword = async (req, res) => {
-    try {
-        // console.log("fhrbhebhgbfr")
-        // console.log(req.user._id)
-        if (!req.user) {
-            return res.status(400).json({ message: 'User Not Found' });
-        }
-        const user = await User.findById(req.user._id).select("+password");
+//6.Get User Detail
+export const getUserDetails = catchAsyncErrors(async (req, res, next) => {
+    const user = await User.findById(req.user.id);
 
-        const isPasswordMatched = await user.comparePassword(req.body.oldPassword);
+    res.status(200).json({
+        success: true,
+        user,
+    });
+});
 
-        if (!isPasswordMatched) {
-            res.status(400).json({ msg: "Old password is incorrect" })
+// 7.update User password
+export const updatePassword = catchAsyncErrors(async (req, res, next) => {
+    const user = await User.findById(req.user.id).select("+password");
 
-        }
+    const isPasswordMatched = await user.comparePassword(req.body.oldPassword);
 
-        if (req.body.newPassword !== req.body.confirmPassword) {
-            res.status(400).json({ msg: "password does not match" })
-
-        }
-
-        user.password = req.body.newPassword;
-
-        await user.save();
-
-        sendToken(user, 200, res);
-    } catch (error) {
-        // console.log(error)
-        res.status(500).json({
-            success: false,
-            msg: "Failled to Password Change !!"
-        });
+    if (!isPasswordMatched) {
+        return next(new ErrorHander("Old password is incorrect", 400));
     }
-}
+
+    if (req.body.newPassword !== req.body.confirmPassword) {
+        return next(new ErrorHander("password does not match", 400));
+    }
+
+    user.password = req.body.newPassword;
+
+    await user.save();
+
+    sendToken(user, 200, res);
+});
+
+// 8.update User Profile
+export const updateProfile = catchAsyncErrors(async (req, res, next) => {
+    const newUserData = {
+        name: req.body.name,
+        phone: req.body.phone,
+        email: req.body.email,
+    };
+
+    if (req.files) {
+        const files = req.files.avatar;
+        const user = await User.findById(req.user.id);
+
+        const imageId = user.avatar.public_id;
+
+        await cloudinary.uploader.destroy(imageId)
+
+        const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
+            folder: "image",
+        },
+            function (error, result) { (result, error) });
+
+        newUserData.avatar = {
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
+        };
+    }
+    const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false,
+    });
+
+    res.status(200).json({
+        success: true,
+        user
+    });
+});
+

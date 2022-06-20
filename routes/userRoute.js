@@ -1,31 +1,33 @@
-import express from "express";
-// import isAuthenticated from "../Utils/aurhe";
+import express from "express"
 import {
     registerUser,
     loginUser,
     logout,
-    updatePassword
+    forgotPassword,
+    resetPassword,
+    getUserDetails,
+    updatePassword,
+    updateProfile,
 } from "../controllers/userController.js"
-// import {isAuthenticatedUser} from "../Middleware/Auth.js";
-import { isAuthenticated } from "../middlewares/auth.js"
-import multer from 'multer'
+import { isAuthenticatedUser, authorizeRoles } from "../middlewares/auth.js"
 
-const uploaderImage = multer({
-    storage: multer.diskStorage({}),
-    fileFilter: (req, file, cb) => {
-        let ext = path.extname(file.originalname);
-        if (ext !== ".jpg" && ext !== ".jpeg" && ext !== ".png") {
-            cb(new Error("File type not supported!"), false)
-            return
-        }
-        cb(null, true);
-    }
-});
 const router = express.Router();
 
-router.route("/user/register/").post(uploaderImage.single("image"), registerUser)
-router.route("/user/login/").post(loginUser)
+router.route("/user/register").post(registerUser);
+
+router.route("/user/login").post(loginUser);
+
+router.route("/user/password/forgot").post(forgotPassword);
+
+router.route("/user/password/reset/:token").put(resetPassword);
+
 router.route("/user/logout").get(logout);
-router.route("/user/update/password").put(isAuthenticated, updatePassword);
+
+router.route("/user/details").get(isAuthenticatedUser, getUserDetails);
+
+router.route("/user/password/update").put(isAuthenticatedUser, updatePassword);
+
+router.route("/user/update/profile").put(isAuthenticatedUser, updateProfile);
+
 
 export default router;
