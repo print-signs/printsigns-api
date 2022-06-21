@@ -13,10 +13,11 @@ export const createBanner = async (req, res) => {
             folder: "cmp/image",
         },
             function (error, result) { (result, error) });
-        const { title, section, startDate, endDate } = req.body;
+        const { title, section, startDate, endDate, subTitle } = req.body;
 
         const data = await Banners.create({
             title,
+            subTitle,
             image: {
                 public_id: myCloud.public_id,
                 url: myCloud.secure_url,
@@ -84,6 +85,8 @@ export const updateBanner = async (req, res) => {
     try {
         const newBannerData = {
             title: req.body.title,
+            subTitle: req.body.subTitle,
+
             section: req.body.section,
             startDate: req.body.startDate,
             endDate: req.body.endDate,

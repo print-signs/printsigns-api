@@ -4,8 +4,9 @@ import cloudinary from "cloudinary";
 export const createOffer = async (req, res) => {
 
     try {
+        // console.log(req.body)
         const files = req.files.image;
-
+        // console.log(req.body)
         // console.log(files)
         const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
             folder: "cmp/image",
@@ -24,6 +25,7 @@ export const createOffer = async (req, res) => {
             bisunessName
 
         });
+        // console.log(data)
         res.status(201).json({
             success: true,
             msg: " create Offer Successfully!!",

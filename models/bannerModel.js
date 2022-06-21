@@ -5,6 +5,10 @@ const bannerSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        subTitle: {
+            type: String,
+            required: true
+        },
         image:
         {
             public_id: {
