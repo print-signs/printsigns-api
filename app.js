@@ -40,7 +40,10 @@ app.use("/api", Event);
 //Offers
 import Offer from "./routes/OffersRoute.js"
 app.use("/api", Offer);
-//Offers
+//banner
 import banner from "./routes/bannerRoute.js"
 app.use("/api", banner);
+//cmp-Ristriction
+import cmpRistriction from "./routes/cmp-restriction-Route.js"
+app.use("/api", cmpRistriction);
 export default app;
