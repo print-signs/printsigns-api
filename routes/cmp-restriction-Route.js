@@ -1,13 +1,13 @@
 import express from "express";
 import {
-    // createRestriction,
+    createRestriction,
     getAllRestriction,
     updateRestriction,
     getOneRestriction
 } from "../controllers/cmp-restriction-Controller.js"
 const router = express.Router();
 
-// router.route("/restriction/create/").post(createRestriction)
+router.route("/restriction/create/").post(createRestriction)
 import { isAuthenticatedUser, authorizeRoles } from "../middlewares/auth.js"
 
 router.route("/restriction/getAll").get(getAllRestriction)

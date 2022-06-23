@@ -1,7 +1,7 @@
 import mongoose from "mongoose"
 const cmpRisSchema = new mongoose.Schema(
     {
-        Abaut_Us: {
+        About_Us: {
             type: String,
             required: true
         },

@@ -23,12 +23,12 @@ export const createRestriction = async (req, res) => {
 export const getAllRestriction = async (req, res) => {
 
     try {
-        const Restriction = await cmpRestrictionModel.find();
+        const CmpRestriction = await cmpRestrictionModel.find();
         // console.log(news)
         res.status(200).json({
             success: true,
             msg: " fetch  Successfully!!",
-            Restriction,
+            CmpRestriction,
         });
     } catch (error) {
         res.status(500).json({
@@ -43,12 +43,12 @@ export const getAllRestriction = async (req, res) => {
 export const getOneRestriction = async (req, res) => {
 
     try {
-        const CmpRes = await cmpRestrictionModel.findById(req.params.id);
+        const CmpRestriction = await cmpRestrictionModel.findById(req.params.id);
 
         res.status(200).json({
             success: true,
             msg: " fetch Restriction  Successfully!!",
-            CmpRes,
+            CmpRestriction,
         });
     } catch (error) {
         // console.log(error)
@@ -65,7 +65,7 @@ export const updateRestriction = async (req, res) => {
     try {
         // console.log(req.body)
         const newResData = {
-            Abaut_Us: req.body.Abaut_Us,
+            About_Us: req.body.Abaut_Us,
             Terms_and_Conditions: req.body.Terms_and_Conditions,
             Privacy_Policy: req.body.Privacy_Policy,
         };
