@@ -7,7 +7,7 @@ import {
     getOneBanner
 } from "../controllers/bannerController.js"
 const router = express.Router();
-
+import { isAuthenticatedUser, authorizeRoles } from "../middlewares/auth.js"
 router.route("/banner/create/").post(createBanner)
 router.route("/banner/getAll/").get(getAllBanner)
 router.route("/banner/getOne/:id").get(getOneBanner)

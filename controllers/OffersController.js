@@ -4,10 +4,8 @@ import cloudinary from "cloudinary";
 export const createOffer = async (req, res) => {
 
     try {
-        // console.log(req.body)
         const files = req.files.image;
-        // console.log(req.body)
-        // console.log(files)
+
         const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
             folder: "cmp/image",
         },
@@ -25,7 +23,6 @@ export const createOffer = async (req, res) => {
             bisunessName
 
         });
-        // console.log(data)
         res.status(201).json({
             success: true,
             msg: " create Offer Successfully!!",
@@ -44,7 +41,6 @@ export const getAllOffer = async (req, res) => {
 
     try {
         const offer = await Offers.find();
-        // console.log(category)
         res.status(200).json({
             success: true,
             msg: " fetch All Offer Successfully!!",
@@ -63,14 +59,13 @@ export const getOneOffer = async (req, res) => {
 
     try {
         const offer = await Offers.findById(req.params.id);
-        // console.log(category)
+
         res.status(200).json({
             success: true,
             msg: " fetch  Successfully!!",
             offer,
         });
     } catch (error) {
-        // console.log(error)
         res.status(500).json({
             success: false,
             msg: "Failled to fetch !!"
@@ -95,15 +90,12 @@ export const updateOffer = async (req, res) => {
             const getOffer = await Offers.findById(req.params.id);
 
             const imageId = getOffer.image.public_id;
-            // console.log(imageId)
-            //delete image from claudinary
+
             await cloudinary.uploader.destroy(imageId)
-            // await cloudinary.uploader.destroy(imageId, function (result) { console.log(result) });
             const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
                 folder: "image",
             },
                 function (error, result) { (result, error) });
-            // console.log(myCloud)
             newOfferData.image = {
                 public_id: myCloud.public_id,
                 url: myCloud.secure_url,
@@ -114,8 +106,7 @@ export const updateOffer = async (req, res) => {
         const ModifyOffer = await Offers.findByIdAndUpdate(req.params.id, newOfferData,
 
             { new: true }
-            // runValidators: true,
-            // useFindAndModify: false,
+
         );
 
         res.status(200).json({

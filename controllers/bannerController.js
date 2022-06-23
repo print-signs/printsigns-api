@@ -8,13 +8,13 @@ export const createBanner = async (req, res) => {
     try {
         const files = req.files.image;
 
+
         // console.log(files)
         const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
             folder: "cmp/image",
         },
             function (error, result) { (result, error) });
         const { title, section, startDate, endDate, subTitle } = req.body;
-
         const data = await Banners.create({
             title,
             subTitle,
@@ -27,12 +27,14 @@ export const createBanner = async (req, res) => {
             endDate
 
         });
+
         res.status(201).json({
             success: true,
             msg: " create Banner Successfully!!",
             data,
         });
     } catch (error) {
+        // console.log(error)
         res.status(500).json({
             success: false,
             msg: "Failled to create Banner !!"

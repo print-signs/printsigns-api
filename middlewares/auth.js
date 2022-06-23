@@ -5,8 +5,14 @@ import ErrorHander from "../Utils/errorhander.js"
 export const isAuthenticatedUser = async (req, res, next) => {
     try {
         // const { token } = req.cookies;
-        const getToken = req.headers;
 
+        const getToken = req.headers;
+        if (!getToken) {
+            return res.status(400).json({
+                success: false,
+                message: "Login to Access this resource",
+            });
+        }
         // // console.log(getToken.authorization)
         // console.log(getToken)
 
@@ -17,7 +23,7 @@ export const isAuthenticatedUser = async (req, res, next) => {
         if (!fronttoken) {
             return res.status(400).json({
                 success: false,
-                message: "Login to Access this resource",
+                message: "Login to Access this resource token",
             });
         }
         // if (!fronttoken) {
