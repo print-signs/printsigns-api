@@ -6,6 +6,7 @@ import sendToken from "../Utils/jwtToken.js"
 import sendEmail from "../Utils/sendEmail.js"
 import crypto from "crypto"
 import cloudinary from "cloudinary"
+import generator from 'generate-password'
 
 // 1.Register a User
 export const registerUser = catchAsyncErrors(async (req, res, next) => {
@@ -90,15 +91,19 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
     //create link for send mail
     // const resetPasswordUrl = `http://localhost:5000/api/v1/user/password/reset/${resetToken}` //send from localhost
     //send from anyhost
-    const resetPasswordUrl = `${req.protocol}://${req.get(
-        "host"
-    )}/api/v1/user/password/reset/${resetToken}`;
+    // const resetPasswordUrl = `${req.protocol}://${req.get(
+    //     "host"
+    // )}/api/v1/user/password/reset/${resetToken}`;
     //const resetPasswordUrl = `${process.env.FRONTEND_URL}:/api/user/password/reset/${resetToken}`;
     //const resetPasswordUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
-
-
-    const message = `Your password reset token are :- \n\n ${resetPasswordUrl} \n\nIf you have not requested this email then, please ignore it.`;
-
+    const password = generator.generate({
+        length: 10,
+        numbers: true
+    });
+    user.password = password;
+    await user.save()
+    // const message = `Your password reset token are :- \n\n ${resetPasswordUrl} \n\nyour new password is:${password}\n\nIf you have not requested this email then, please ignore it.`;
+    const message = `your new password is:${password}\n\nIf you have not requested this email then, please ignore it.`
     try {
         await sendEmail({
             email: user.email,
