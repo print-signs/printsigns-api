@@ -65,7 +65,7 @@ export const updateRestriction = async (req, res) => {
     try {
         // console.log(req.body)
         const newResData = {
-            About_Us: req.body.Abaut_Us,
+            About_Us: req.body.About_Us,
             Terms_and_Conditions: req.body.Terms_and_Conditions,
             Privacy_Policy: req.body.Privacy_Policy,
         };
