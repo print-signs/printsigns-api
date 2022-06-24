@@ -41,5 +41,23 @@ export const getAllFeedback = async (req, res) => {
     }
 
 };
+//get All feedback
+export const getAOneFeedback = async (req, res) => {
+
+    try {
+        const feedback = await feedbackModel.find(req.params.id);
+        res.status(200).json({
+            success: true,
+            msg: " fetch feedback  Successfully!!",
+            feedback
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            msg: "Failled to fetch !!"
+        });
+    }
+
+};
 
 
