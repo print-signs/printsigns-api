@@ -46,4 +46,7 @@ app.use("/api", banner);
 //cmp-Ristriction
 import cmpRistriction from "./routes/cmp-restriction-Route.js"
 app.use("/api", cmpRistriction);
+//feedback
+import feedback from "./routes/feedbackRoute.js"
+app.use("/api", feedback);
 export default app;
