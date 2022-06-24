@@ -8,6 +8,7 @@ import {
     getUserDetails,
     updatePassword,
     updateProfile,
+    getSingleUser
 } from "../controllers/userController.js"
 import { isAuthenticatedUser, authorizeRoles } from "../middlewares/auth.js"
 
@@ -24,6 +25,11 @@ router.route("/user/password/reset/:token").put(resetPassword);
 router.route("/user/logout").get(logout);
 
 router.route("/user/details").get(isAuthenticatedUser, getUserDetails);
+router
+    .route("/admin/user/:id")
+    .get(isAuthenticatedUser, authorizeRoles("admin"), getSingleUser)
+
+
 
 router.route("/user/password/update").put(isAuthenticatedUser, updatePassword);
 

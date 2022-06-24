@@ -171,7 +171,22 @@ export const getUserDetails = catchAsyncErrors(async (req, res, next) => {
     });
 });
 
-// 7.update User password
+// 7.Get single user (admin)
+exports.getSingleUser = catchAsyncErrors(async (req, res, next) => {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+        return next(
+            new ErrorHander(`User does not exist with Id: ${req.params.id}`)
+        );
+    }
+
+    res.status(200).json({
+        success: true,
+        user,
+    });
+});
+// 8.update User password
 export const updatePassword = catchAsyncErrors(async (req, res, next) => {
     const user = await User.findById(req.user.id).select("+password");
 
@@ -192,7 +207,7 @@ export const updatePassword = catchAsyncErrors(async (req, res, next) => {
     sendToken(user, 200, res);
 });
 
-// 8.update User Profile
+// 9.update User Profile
 export const updateProfile = catchAsyncErrors(async (req, res, next) => {
     const newUserData = {
         name: req.body.name,
