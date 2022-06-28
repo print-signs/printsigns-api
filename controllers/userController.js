@@ -245,3 +245,13 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
     });
 });
 
+// 9.Get all users(admin)
+export const getAllUser = catchAsyncErrors(async (req, res, next) => {
+
+    const users = await User.find()//.select('-role');
+
+    res.status(200).json({
+        success: true,
+        users,
+    });
+});

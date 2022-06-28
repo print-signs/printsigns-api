@@ -4,6 +4,7 @@ import cloudinary from "cloudinary";
 export const createOffer = async (req, res) => {
 
     try {
+        //console.log(req.body)
         const files = req.files.image;
 
         const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {

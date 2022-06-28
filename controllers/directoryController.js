@@ -4,11 +4,8 @@ export const createDirectory = async (req, res) => {
 
     try {
         let images;
-        // console.log(req.body)
-        // console.log(req.body.image)
         if (req.files) {
             const files = req.files.image;
-            // console.log(files)
             const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
                 folder: "cmp/image",
             },
@@ -116,7 +113,19 @@ export const updateDirectory = async (req, res) => {
         // };
         // console.log(newCategoryData)
         //req.user.id, 
-
+        let images;
+        if (req.files) {
+            const files = req.files.image;
+            const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
+                folder: "cmp/image",
+            },
+                function (error, result) { (result, error) });
+            images = {
+                public_id: myCloud.public_id,
+                url: myCloud.secure_url,
+            }
+        }
+        req.body.image = images;
         const ModifyDirectory = await directoryModel.findByIdAndUpdate(req.params.id, req.body,
 
             { new: true }
