@@ -14,7 +14,8 @@ export const createBanner = async (req, res) => {
             folder: "cmp/image",
         },
             function (error, result) { (result, error) });
-        const { title, section, startDate, endDate, subTitle } = req.body;
+
+        const { title, section, startDate, subSection, endDate, subTitle } = req.body;
         const data = await Banners.create({
             title,
             subTitle,
@@ -24,7 +25,8 @@ export const createBanner = async (req, res) => {
             },
             section,
             startDate,
-            endDate
+            endDate,
+            subSection
 
         });
 

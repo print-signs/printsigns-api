@@ -24,6 +24,10 @@ const bannerSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        subSection: {
+            type: String,
+        },
+
         startDate: {
             type: Date,
             required: true
