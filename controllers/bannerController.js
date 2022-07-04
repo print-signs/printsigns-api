@@ -92,6 +92,7 @@ export const updateBanner = async (req, res) => {
             subTitle: req.body.subTitle,
 
             section: req.body.section,
+            subSection: req.body.subSection,
             startDate: req.body.startDate,
             endDate: req.body.endDate,
         };
