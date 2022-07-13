@@ -4,7 +4,7 @@ dotenv.config()
 import app from "./app.js"
 import connectDatabase from "./database/db.js";
 import cloudinary from "cloudinary"
-// const PORT = 5000;
+
 // Connecting to database
 connectDatabase();
 

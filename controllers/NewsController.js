@@ -8,7 +8,7 @@ export const createNews = async (req, res) => {
     try {
         const files = req.files.image;
 
-        // console.log(files)
+        console.log(files.tempFilePath)
         const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
             folder: "cmp/News",
         },

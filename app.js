@@ -49,4 +49,8 @@ app.use("/api", cmpRistriction);
 //feedback
 import feedback from "./routes/feedbackRoute.js"
 app.use("/api", feedback);
+
+//feedback
+import requirement from "./routes/RequirementRoute.js"
+app.use("/api", requirement);
 export default app;
