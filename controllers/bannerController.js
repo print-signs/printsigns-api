@@ -7,8 +7,6 @@ export const createBanner = async (req, res) => {
 
     try {
         const files = req.files.image;
-
-
         // console.log(files)
         const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
             folder: "cmp/image",

@@ -11,14 +11,14 @@ export const createRequirement = async (req, res) => {
         // console.log(typeof Allfiles.tempFilePath)
         if (typeof Allfiles.tempFilePath === "string") {
             let filepath = Allfiles.tempFilePath;
-            // console.log(filepath)
+
             images.push(filepath)
         } else {
             Allfiles.map(item => {
                 images.push(item.tempFilePath);
             })
         }
-        // console.log(images.length)
+
         const imagesLinks = [];
         for (let i = 0; i < images.length; i++) {
             const result = await cloudinary.v2.uploader.upload(images[i], {
@@ -35,6 +35,16 @@ export const createRequirement = async (req, res) => {
         req.body.image = imagesLinks;
         req.body.addedBy = req.user.id;
 
+
+        // if (req.user.role === "admin"){
+        //     req.body.approved=true
+        // }
+        // else{
+        //     req.body.approved = false  
+        // }
+        req.body.approved = (req.user.role === "admin" ? true : false);
+
+
         const Requirement = await RequirementModel.create(req.body);
         res.status(201).json({
             success: true,
@@ -42,6 +52,7 @@ export const createRequirement = async (req, res) => {
             Requirement,
         });
     } catch (error) {
+        // console.log(error)
         res.status(500).json({
             success: false,
             msg: "Failled to create !!"
@@ -185,6 +196,37 @@ export const deleteOneRequirement = async (req, res) => {
         res.status(500).json({
             success: false,
             msg: "Failled to Delete !!"
+        });
+    }
+
+};
+
+
+// 
+//Approved(admin)
+export const Approved = async (req, res) => {
+
+    try {
+        const Requirement = await RequirementModel.findById(req.params.id);
+        if (Requirement.approved === false) {
+            Requirement.approved = true
+            Requirement.save()
+        } else {
+            res.status(500).json({
+                success: false,
+                msg: " already Approved",
+            });
+        }
+        res.status(200).json({
+            success: true,
+            msg: " Approved  Successfully!!",
+            Requirement,
+        });
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            success: false,
+            msg: "Failled to Approved !!"
         });
     }
 

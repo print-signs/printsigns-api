@@ -16,8 +16,6 @@ app.use(cookieParser());
 app.use(cors())
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }));
-
-//express file upload 
 app.use(fileUpload({
     useTempFiles: true
 }));
