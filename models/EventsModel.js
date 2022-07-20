@@ -24,6 +24,11 @@ const eventSchema = new mongoose.Schema(
             type: String,
             required: true
         },
+        addedBy: {
+            type: mongoose.Schema.ObjectId,
+            ref: "User",
+            required: true,
+        },
         addedOn: {
             type: Date,
             default: Date.now
@@ -33,3 +38,22 @@ const eventSchema = new mongoose.Schema(
 );
 const eventModel = mongoose.model("event", eventSchema);
 export default eventModel
+
+const ResisterUserSchema = new mongoose.Schema(
+    {
+
+        eventId: {
+            type: String,
+            required: true
+        },
+        userId: {
+            type: mongoose.Schema.ObjectId,
+            ref: "User",
+            required: true,
+        },
+
+
+    }, { timestamps: true }
+);
+const ResisterUserModel = mongoose.model("RegisterUserInEvent", ResisterUserSchema);
+export { ResisterUserModel }

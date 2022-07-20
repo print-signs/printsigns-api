@@ -42,3 +42,29 @@ const RequirementSchema = new mongoose.Schema(
 );
 const RequirementModel = mongoose.model("Requirement", RequirementSchema);
 export default RequirementModel;
+
+
+const RequirementCommentSchema = new mongoose.Schema(
+    {
+
+        requirementId: {
+            type: String,
+            required: true
+        },
+
+        comment: {
+            type: String,
+            required: true
+        },
+
+        userId: {
+            type: mongoose.Schema.ObjectId,
+            ref: "User",
+            required: true,
+        },
+
+
+    }, { timestamps: true }
+);
+const RequirementCommentModel = mongoose.model("RequirementComment", RequirementCommentSchema);
+export { RequirementCommentModel };

@@ -1,5 +1,6 @@
 import Events from "../models/EventsModel.js"
 import cloudinary from "cloudinary";
+import { ResisterUserModel } from "../models/EventsModel.js"
 // import cloudinary from "../Utils/cloudinary.js"
 //import { v2 as cloudinary } from 'cloudinary'
 
@@ -22,7 +23,8 @@ export const createEvent = async (req, res) => {
                 url: myCloud.secure_url,
             },
             location,
-            description
+            description,
+            addedBy: req.user.id
 
         });
         res.status(201).json({
@@ -38,7 +40,7 @@ export const createEvent = async (req, res) => {
     }
 
 };
-//get All Product
+//get All Event
 export const getAllEvent = async (req, res) => {
 
     try {
@@ -57,7 +59,7 @@ export const getAllEvent = async (req, res) => {
     }
 
 };
-//get One Product
+//get One Event
 export const getOneEvent = async (req, res) => {
 
     try {
@@ -132,7 +134,7 @@ export const updateEvent = async (req, res) => {
 
 };
 
-//delete one category
+//delete one Event
 export const deleteEvent = async (req, res) => {
 
     try {
@@ -161,3 +163,76 @@ export const deleteEvent = async (req, res) => {
     }
 
 };
+
+
+//EventRegisterUser
+
+export const RegisterUserInEvent = async (req, res) => {
+    try {
+        const totalUserRegister = await ResisterUserModel.findOne({
+            userId: req.user.id,
+            eventId: req.params.id,
+        })
+        if (totalUserRegister) {
+
+            return res.status(500).json({
+                success: false,
+                msg: "You Have Already Registered for this Event"
+            });
+        }
+        const Event = await ResisterUserModel.create({
+            eventId: req.params.id,
+            userId: req.user.id,
+
+        })
+        res.status(201).json({
+            success: true,
+            msg: " Register  Successfully!!",
+            Event,
+        });
+    } catch (error) {
+        // console.log(error)
+        res.status(500).json({
+            success: false,
+            msg: "Failled to Register !!"
+        });
+    }
+}
+//getAllRegisterUser
+export const getAllRegisterUser = async (req, res) => {
+    try {
+        const totalUserRegister = await ResisterUserModel.find({ eventId: req.params.id }).count()
+        const user = await ResisterUserModel.find({ eventId: req.params.id }).populate('userId')
+        res.status(200).json({
+            success: true,
+            msg: " get All  user Register in Event  Successfully!!",
+            totalUserRegister,
+            user,
+        });
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({
+            success: false,
+            msg: "Failled  to fetch !!"
+        });
+    }
+}
+//getSingleRegisterUser
+export const getSingleRegisterUser = async (req, res) => {
+    try {
+
+        const user = await ResisterUserModel.findById(req.params.id).populate('userId').
+
+            res.status(200).json({
+                success: true,
+                msg: " get   Successfully!!",
+                user,
+            });
+    } catch (error) {
+        // console.log(error)
+        res.status(500).json({
+            success: false,
+            msg: "Failled  to fetch !!"
+        });
+    }
+}

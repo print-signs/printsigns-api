@@ -1,5 +1,6 @@
 import RequirementModel from "../models/RequirementModel.js"
 import cloudinary from "cloudinary";
+import { RequirementCommentModel } from "../models/RequirementModel.js";
 // import cloudinary from "../Utils/cloudinary.js"
 //import { v2 as cloudinary } from 'cloudinary'
 
@@ -231,3 +232,64 @@ export const Approved = async (req, res) => {
     }
 
 };
+//comment
+
+export const AddComment = async (req, res) => {
+    try {
+
+        const comment = await RequirementCommentModel.create({
+            requirementId: req.params.id,
+            userId: req.user._id,
+            comment: req.body.comment
+
+        })
+        res.status(201).json({
+            success: true,
+            msg: " Create  Successfully!!",
+            comment,
+        });
+    } catch (error) {
+        // console.log(error)
+        res.status(500).json({
+            success: false,
+            msg: "Failled to create !!"
+        });
+    }
+}
+//get  All Comment
+export const getAllComment = async (req, res) => {
+    try {
+
+        const comment = await RequirementCommentModel.find()
+        res.status(200).json({
+            success: true,
+            msg: " get All  Comment  Successfully!!",
+            comment,
+        });
+    } catch (error) {
+        // console.log(error)
+        res.status(500).json({
+            success: false,
+            msg: "Failled  to fetch !!"
+        });
+    }
+}
+//get Comment
+export const getSingleComment = async (req, res) => {
+    try {
+
+        const comment = await RequirementCommentModel.findById(req.params.id).populate('userId').
+
+            res.status(200).json({
+                success: true,
+                msg: " get Comment  Successfully!!",
+                comment,
+            });
+    } catch (error) {
+        // console.log(error)
+        res.status(500).json({
+            success: false,
+            msg: "Failled  to fetch !!"
+        });
+    }
+}
