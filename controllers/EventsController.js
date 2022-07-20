@@ -7,6 +7,7 @@ import { ResisterUserModel } from "../models/EventsModel.js"
 export const createEvent = async (req, res) => {
 
     try {
+        // console.log(req.body)
         const files = req.files.image;
 
         // console.log(files)
@@ -14,7 +15,7 @@ export const createEvent = async (req, res) => {
             folder: "cmp/image",
         },
             function (error, result) { (result, error) });
-        const { title, location, description } = req.body;
+        const { title, location, description, date, time } = req.body;
 
         const data = await Events.create({
             title,
@@ -24,6 +25,8 @@ export const createEvent = async (req, res) => {
             },
             location,
             description,
+            date,
+            time,
             addedBy: req.user.id
 
         });
@@ -33,6 +36,7 @@ export const createEvent = async (req, res) => {
             data,
         });
     } catch (error) {
+        // console.log(error)
         res.status(500).json({
             success: false,
             msg: "Failled to create Event !!"
@@ -87,6 +91,8 @@ export const updateEvent = async (req, res) => {
             title: req.body.title,
             description: req.body.description,
             location: req.body.location,
+            date: req.body.date,
+            time: req.body.time,
         };
 
 
