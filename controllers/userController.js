@@ -103,12 +103,15 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
     user.password = password;
     await user.save()
     // const message = `Your password reset token are :- \n\n ${resetPasswordUrl} \n\nyour new password is:${password}\n\nIf you have not requested this email then, please ignore it.`;
-    const message = `your new password is:${password}\n\nIf you have not requested this email then, please ignore it.`
     try {
+
         await sendEmail({
-            email: user.email,
+
+            to: `${user.email}`, // Change to your recipient
+            from: 'project.edufuture@gmail.com', // Change to your verified sender
             subject: `CMP Password Recovery`,
-            message,
+            html: `your new password is: <br/> <strong> ${password}</strong><br/><br/>If you have not requested this email then, please ignore it.`
+
         });
 
         res.status(200).json({
