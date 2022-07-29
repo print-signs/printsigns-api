@@ -260,7 +260,7 @@ export const AddComment = async (req, res) => {
 export const getAllComment = async (req, res) => {
     try {
 
-        const comment = await RequirementCommentModel.find()
+        const comment = await RequirementCommentModel.find().populate('userId')
         res.status(200).json({
             success: true,
             msg: " get All  Comment  Successfully!!",
