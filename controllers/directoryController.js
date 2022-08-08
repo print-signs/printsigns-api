@@ -207,7 +207,7 @@ export const setStatus = async (req, res) => {
     try {
         const id = req.params.id;
         if (!id) return res.status(400).json({ message: 'id is required' });
-
+        // console.log(id)
         const directory = await directoryModel.findById(req.params.id)
 
         if (!directory)
