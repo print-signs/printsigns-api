@@ -47,7 +47,8 @@ export const createDirectory = async (req, res) => {
             LinkedinUrl,
             FacebookUrl,
             InstagramUrl,
-            image: images
+            image: images,
+            userId: req.user.id
 
         });
         res.status(201).json({
@@ -84,7 +85,7 @@ export const getAllDirectory = async (req, res) => {
     }
 
 };
-//get One Product
+//get One Directory
 export const getOneDirectory = async (req, res) => {
 
     try {
@@ -179,3 +180,26 @@ export const deleteOneDirectory = async (req, res) => {
 
 };
 
+//get One Directory from userid
+export const getSelfDirectory = async (req, res) => {
+
+    try {
+        const directory = await directoryModel.findOne({ userId: req.params.id });
+        // console.log(category)
+        if (!directory) {
+            return res.status(400).json({ message: 'No  self directory ' });
+        }
+        res.status(200).json({
+            success: true,
+            msg: " fetch  Successfully!!",
+            selfDirectory,
+        });
+    } catch (error) {
+        // console.log(error)
+        res.status(500).json({
+            success: false,
+            msg: "Failled to fetch !!"
+        });
+    }
+
+};

@@ -67,6 +67,11 @@ const directorySchema = new mongoose.Schema(
             type: String,
 
         },
+        userId: {
+            type: mongoose.Schema.ObjectId,
+            ref: "User",
+            required: true,
+        },
 
     }, { timestamps: true }
 );

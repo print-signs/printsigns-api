@@ -54,7 +54,7 @@ export const createRequirement = async (req, res) => {
         });
     } catch (error) {
         // console.log(error)
-        res.status(500).json({
+        res.status(400).json({
             success: false,
             msg: "Failled to create !!"
         });
