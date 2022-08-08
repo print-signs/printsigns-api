@@ -9,27 +9,40 @@ import cloudinary from "cloudinary"
 import generator from 'generate-password'
 
 // 1.Register a User
-export const registerUser = catchAsyncErrors(async (req, res, next) => {
-    const files = req.files.avatar;
-    const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
-        folder: "cmp-user/image",
-    },
-        function (error, result) { (result, error) });
-
-    const { name, email, password, phone } = req.body;
-
-    const user = await User.create({
-        name,
-        email,
-        password,
-        phone,
-        avatar: {
-            public_id: myCloud.public_id,
-            url: myCloud.secure_url,
+export const registerUser = async (req, res, next) => {
+    try {
+        const files = req.files.avatar;
+        const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
+            folder: "cmp-user/image",
         },
-    });
-    sendToken(user, 201, res);
-});
+            function (error, result) { (result, error) });
+
+        const { name, email, password, phone } = req.body;
+
+        const user = await User.create({
+            name,
+            email,
+            password,
+            phone,
+            avatar: {
+                public_id: myCloud.public_id,
+                url: myCloud.secure_url,
+            },
+        });
+        sendToken(user, 201, res);
+    } catch (e) {
+        // console.log(e.message);
+        if (e.toString().includes('E11000 duplicate key error collection')) {
+            return res.status(400).json({
+                status: 'User Already Exists'
+            });
+        }
+        return res
+            .status(400)
+            .json({ status: 'Error Communicating with server' });
+    }
+
+};
 
 // 2.Login User
 export const loginUser = catchAsyncErrors(async (req, res, next) => {
