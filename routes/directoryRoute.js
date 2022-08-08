@@ -5,10 +5,12 @@ import {
     updateDirectory,
     deleteOneDirectory,
     getOneDirectory,
-    getSelfDirectory
+    getSelfDirectory,
+    setStatus
+
 } from "../controllers/directoryController.js"
 const router = express.Router();
-import { isAuthenticatedUser } from "../middlewares/auth.js"
+import { isAuthenticatedUser, authorizeRoles } from "../middlewares/auth.js"
 
 
 import multer from 'multer'
@@ -29,7 +31,9 @@ router.route("/directory/getAll/").get(getAllDirectory)
 router.route("/directory/getOne/:id").get(getOneDirectory)
 router.route("/directory/update/:id").put(isAuthenticatedUser, updateDirectory);
 router.route("/directory/delete/:id").delete(isAuthenticatedUser, deleteOneDirectory);
-router.route("/directory/self/:id").get(isAuthenticatedUser, getSelfDirectory);
 //get Directory from user id
+router.route("/directory/self/:id").get(isAuthenticatedUser, getSelfDirectory);
+router.route("/directory/admin/setStatus/:id").get(isAuthenticatedUser, authorizeRoles('admin'), setStatus);
+
 
 export default router;

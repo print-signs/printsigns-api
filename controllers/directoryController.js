@@ -203,3 +203,31 @@ export const getSelfDirectory = async (req, res) => {
     }
 
 };
+export const setStatus = async (req, res) => {
+    try {
+        const id = req.params.id;
+        if (!id) return res.status(400).json({ message: 'id is required' });
+
+        const directory = await directoryModel.findById(req.params.id)
+
+        if (!directory)
+            return res
+                .status(404)
+                .json({ message: 'Did not find directory by given id' });
+        if (directory.status === "true") {
+            directory.status = false
+        }
+        else {
+            directory.status = true
+        }
+
+        directory.save();
+        // console.log(directory)
+        res.status(200).json(directory);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
