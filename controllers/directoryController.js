@@ -184,7 +184,7 @@ export const deleteOneDirectory = async (req, res) => {
 export const getSelfDirectory = async (req, res) => {
 
     try {
-        const directory = await directoryModel.findOne({ userId: req.params.id });
+        const directory = await directoryModel.find({ userId: req.params.id });
         // console.log(category)
         if (!directory) {
             return res.status(400).json({ message: 'No  self directory ' });
@@ -192,10 +192,10 @@ export const getSelfDirectory = async (req, res) => {
         res.status(200).json({
             success: true,
             msg: " fetch  Successfully!!",
-            selfDirectory,
+            directory,
         });
     } catch (error) {
-        // console.log(error)
+        //console.log(error)
         res.status(500).json({
             success: false,
             msg: "Failled to fetch !!"
