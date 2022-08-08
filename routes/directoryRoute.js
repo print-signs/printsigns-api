@@ -29,7 +29,7 @@ router.route("/directory/getAll/").get(getAllDirectory)
 router.route("/directory/getOne/:id").get(isAuthenticatedUser, getOneDirectory)
 router.route("/directory/update/:id").put(isAuthenticatedUser, updateDirectory);
 router.route("/directory/delete/:id").delete(isAuthenticatedUser, deleteOneDirectory);
-router.route("/directory/self/:id").delete(isAuthenticatedUser, getSelfDirectory);
+router.route("/directory/self/:id").get(isAuthenticatedUser, getSelfDirectory);
 //get Directory from user id
 
 export default router;
