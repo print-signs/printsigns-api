@@ -7,7 +7,7 @@ import sendEmail from "../Utils/sendEmail.js"
 import crypto from "crypto"
 import cloudinary from "cloudinary"
 import generator from 'generate-password'
-
+import password from 'secure-random-password'
 // 1.Register a User
 export const registerUser = async (req, res, next) => {
     try {
@@ -110,11 +110,16 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
     // )}/api/v1/user/password/reset/${resetToken}`;
     //const resetPasswordUrl = `${process.env.FRONTEND_URL}:/api/user/password/reset/${resetToken}`;
     //const resetPasswordUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
-    const password = generator.generate({
-        length: 10,
-        numbers: true
-    });
-    user.password = password;
+    const passwords = password.randomPassword({
+        length: 12,
+        characters: [
+            { characters: password.upper, exactly: 1 },
+            { characters: password.symbols, exactly: 1 },
+            password.lower,
+            password.digits]
+    })
+
+    user.password = passwords;
     await user.save()
     // const message = `Your password reset token are :- \n\n ${resetPasswordUrl} \n\nyour new password is:${password}\n\nIf you have not requested this email then, please ignore it.`;
     try {
@@ -122,9 +127,11 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
         await sendEmail({
 
             to: `${user.email}`, // Change to your recipient
-            from: 'project.edufuture@gmail.com', // Change to your verified sender
+
+            from: 'project.saleschampions@gmail.com', // Change to your verified sender
+            // from: 'project.edufuture@gmail.com', // Change to your verified sender
             subject: `CMP Password Recovery`,
-            html: `your new password is: <br/> <strong> ${password}</strong><br/><br/>If you have not requested this email then, please ignore it.`
+            html: `your new password is: <br/> <strong> ${passwords}</strong><br/><br/>If you have not requested this email then, please ignore it.`
 
         });
 
