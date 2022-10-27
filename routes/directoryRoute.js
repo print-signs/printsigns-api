@@ -32,7 +32,7 @@ router.route("/directory/getOne/:id").get(getOneDirectory)
 router.route("/directory/update/:id").put(isAuthenticatedUser, updateDirectory);
 router.route("/directory/delete/:id").delete(isAuthenticatedUser, deleteOneDirectory);
 //get Directory from user id
-router.route("/directory/self/:id").get(isAuthenticatedUser, getSelfDirectory);
+router.route("/directory/self/").get(isAuthenticatedUser, getSelfDirectory);
 router.route("/directory/admin/setStatus/:id").get(isAuthenticatedUser, authorizeRoles('admin'), setStatus);
 
 
