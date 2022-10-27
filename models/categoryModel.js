@@ -16,6 +16,17 @@ const categorySchema = new mongoose.Schema(
                 required: true,
             },
         },
+        category_banner:
+        {
+            public_id: {
+                type: String,
+                required: true,
+            },
+            url: {
+                type: String,
+                required: true,
+            },
+        },
         addedOn: {
             type: Date,
             default: Date.now
