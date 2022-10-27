@@ -1,7 +1,6 @@
 import Category from "../models/categoryModel.js"
 import cloudinary from "cloudinary";
-// import cloudinary from "../Utils/cloudinary.js"
-//import { v2 as cloudinary } from 'cloudinary'
+
 
 export const createCategory = async (req, res) => {
 
@@ -51,7 +50,7 @@ export const getAllCategory = async (req, res) => {
 
     try {
         const category = await Category.find().sort({ createdAt: -1 });
-        // console.log(category)
+
         res.status(200).json({
             success: true,
             msg: " fetch  Successfully!!",
@@ -70,14 +69,14 @@ export const getOneCategory = async (req, res) => {
 
     try {
         const category = await Category.findById(req.params.id);
-        // console.log(category)
+
         res.status(200).json({
             success: true,
             msg: " fetch  Successfully!!",
             category,
         });
     } catch (error) {
-        // console.log(error)
+
         res.status(500).json({
             success: false,
             msg: "Failled to fetch !!"
@@ -99,10 +98,9 @@ export const updateCategory = async (req, res) => {
             const categ = await Category.findById(req.params.id);
             if (req.files.image) {
                 const imageId = categ.image.public_id;
-                // console.log(imageId)
+
                 //delete image from claudinary
                 await cloudinary.uploader.destroy(imageId)
-                // await cloudinary.uploader.destroy(imageId, function (result) { console.log(result) });
                 const files = req.files.image;
                 const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
                     folder: "image",
@@ -114,12 +112,12 @@ export const updateCategory = async (req, res) => {
                 };
             }
             if (req.files.category_banner) {
-                if (categ.category_banner.public_id) {
-                    const imageId = categ.category_banner.public_id;
 
-                    //delete image from claudinary
-                    await cloudinary.uploader.destroy(imageId)
-                }
+                const BannerImageId = categ.category_banner.public_id;
+
+                //delete image from claudinary
+                await cloudinary.uploader.destroy(BannerImageId)
+
 
                 const files = req.files.category_banner;
                 const BannerImage = await cloudinary.uploader.upload(files.tempFilePath, {
@@ -131,14 +129,9 @@ export const updateCategory = async (req, res) => {
                     url: BannerImage.secure_url,
                 };
             }
-
-
-            // console.log(myCloud)
-
         }
-        // console.log(newCategoryData)
 
-        //req.user.id, 
+
         const ModifyCategory = await Category.findByIdAndUpdate(req.params.id, newCategoryData,
 
             { new: true }
