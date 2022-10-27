@@ -31,7 +31,7 @@ router
     .get(isAuthenticatedUser, authorizeRoles("admin"), getAllUser);
 router
     .route("/admin/user/:id")
-    .get(isAuthenticatedUser, authorizeRoles("admin"), getSingleUser)
+    .get(isAuthenticatedUser, authorizeRoles("admin"), getSingleUser);
 
 
 
