@@ -108,12 +108,6 @@ export const getOneDirectory = async (req, res) => {
 
 export const updateDirectory = async (req, res) => {
     try {
-        // const newDirectoryData = {
-        //     name: req.body.name,
-        //     // email: req.body.email,
-        // };
-        // console.log(newCategoryData)
-        //req.user.id, 
         let images;
         if (req.files) {
             const files = req.files.image;
@@ -184,10 +178,10 @@ export const deleteOneDirectory = async (req, res) => {
 export const getSelfDirectory = async (req, res) => {
 
     try {
-        const directory = await directoryModel.find({ userId: req.params.id });
+        const directory = await directoryModel.findOne({ userId: req.user.id });
         // console.log(category)
         if (!directory) {
-            return res.status(400).json({ message: 'No  self directory ' });
+            return res.status(400).json({ message: 'No  self directory exist ' });
         }
         res.status(200).json({
             success: true,

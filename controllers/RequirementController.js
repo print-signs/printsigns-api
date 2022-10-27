@@ -65,13 +65,23 @@ export const createRequirement = async (req, res) => {
 export const getAllRequirement = async (req, res) => {
 
     try {
-        const Requirement = await RequirementModel.find();
-        // console.log(news)
-        res.status(200).json({
-            success: true,
-            msg: " fetch  Successfully!!",
-            Requirement,
-        });
+        if (req.user.role === "admin") {
+            const Requirement = await RequirementModel.find();
+            res.status(200).json({
+                success: true,
+                msg: " fetch  Successfully!!",
+                Requirement,
+            });
+        }
+        else {
+            const Requirement = await RequirementModel.find({ approved: true });
+            res.status(200).json({
+                success: true,
+                msg: " fetch  Successfully!!",
+                Requirement,
+            });
+        }
+
     } catch (error) {
         res.status(500).json({
             success: false,
