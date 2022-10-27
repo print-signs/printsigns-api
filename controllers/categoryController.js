@@ -114,10 +114,13 @@ export const updateCategory = async (req, res) => {
                 };
             }
             if (req.files.category_banner) {
-                const imageId = categ.category_banner.public_id;
-                // console.log(imageId)
-                //delete image from claudinary
-                await cloudinary.uploader.destroy(imageId)
+                if (categ.category_banner) {
+                    const imageId = categ.category_banner.public_id;
+                    // console.log(imageId)
+                    //delete image from claudinary
+                    await cloudinary.uploader.destroy(imageId)
+                }
+
                 // await cloudinary.uploader.destroy(imageId, function (result) { console.log(result) });
                 const files = req.files.category_banner;
                 const BannerImage = await cloudinary.uploader.upload(files.tempFilePath, {
