@@ -13,10 +13,10 @@ export const createBanner = async (req, res) => {
         },
             function (error, result) { (result, error) });
 
-        const { title, startDate, endDate, subTitle } = req.body;
+        const { title, startDate, endDate } = req.body;
         const data = await Banners.create({
             title,
-            subTitle,
+            // subTitle,
             image: {
                 public_id: myCloud.public_id,
                 url: myCloud.secure_url,
@@ -88,7 +88,7 @@ export const updateBanner = async (req, res) => {
 
         const newBannerData = {
             title: req.body.title,
-            subTitle: req.body.subTitle,
+            // subTitle: req.body.subTitle,
 
             // section: req.body.section,
             // subSection: req.body.subSection,

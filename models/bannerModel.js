@@ -5,10 +5,10 @@ const bannerSchema = new mongoose.Schema(
             type: String,
             required: true
         },
-        subTitle: {
-            type: String,
-            required: true
-        },
+        // subTitle: {
+        //     type: String,
+        //     required: true
+        // },
         image:
         {
             public_id: {
@@ -20,13 +20,13 @@ const bannerSchema = new mongoose.Schema(
                 required: true,
             },
         },
-        section: {
-            type: String,
+        // section: {
+        //     type: String,
 
-        },
-        subSection: {
-            type: String,
-        },
+        // },
+        // subSection: {
+        //     type: String,
+        // },
 
         startDate: {
             type: Date,
