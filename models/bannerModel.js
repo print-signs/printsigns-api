@@ -22,7 +22,7 @@ const bannerSchema = new mongoose.Schema(
         },
         section: {
             type: String,
-            required: true
+
         },
         subSection: {
             type: String,

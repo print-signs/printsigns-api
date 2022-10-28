@@ -178,8 +178,8 @@ export const deleteOneDirectory = async (req, res) => {
 export const getSelfDirectory = async (req, res) => {
 
     try {
-        const directory = await directoryModel.findOne({ userId: req.user.id });
-        // console.log(category)
+        const directory = await directoryModel.find({ userId: req.user.id });
+
         if (!directory) {
             return res.status(400).json({ message: 'No  self directory exist ' });
         }

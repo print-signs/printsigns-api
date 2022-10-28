@@ -197,11 +197,16 @@ export const getUserDetails = catchAsyncErrors(async (req, res, next) => {
 
 // 7.Get single user (admin)
 export const getSingleUser = catchAsyncErrors(async (req, res, next) => {
+    if (!req.params.id) {
+        return next(
+            new ErrorHander(`please send User ID`, 404)
+        );
+    }
     const user = await User.findById(req.params.id);
 
     if (!user) {
         return next(
-            new ErrorHander(`User does not exist with Id: ${req.params.id}`)
+            new ErrorHander(`User does not exist with Id: ${req.params.id}`, 404)
         );
     }
 

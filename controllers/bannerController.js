@@ -13,7 +13,7 @@ export const createBanner = async (req, res) => {
         },
             function (error, result) { (result, error) });
 
-        const { title, section, startDate, subSection, endDate, subTitle } = req.body;
+        const { title, startDate, endDate, subTitle } = req.body;
         const data = await Banners.create({
             title,
             subTitle,
@@ -21,10 +21,10 @@ export const createBanner = async (req, res) => {
                 public_id: myCloud.public_id,
                 url: myCloud.secure_url,
             },
-            section,
+            // section,
             startDate,
             endDate,
-            subSection
+            // subSection
 
         });
 
@@ -85,12 +85,13 @@ export const getOneBanner = async (req, res) => {
 // 3.update Event
 export const updateBanner = async (req, res) => {
     try {
+
         const newBannerData = {
             title: req.body.title,
             subTitle: req.body.subTitle,
 
-            section: req.body.section,
-            subSection: req.body.subSection,
+            // section: req.body.section,
+            // subSection: req.body.subSection,
             startDate: req.body.startDate,
             endDate: req.body.endDate,
         };
@@ -130,7 +131,7 @@ export const updateBanner = async (req, res) => {
         });
 
     } catch (error) {
-        // console.log(error)
+        console.log(error)
         res.status(500).json({
             success: false,
             msg: "Failled to UpDate Banner!!"
