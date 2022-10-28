@@ -80,7 +80,7 @@ export const getAllDirectory = async (req, res) => {
             });
         }
         else {
-            const directory = await directoryModel.find({ status: "true" });
+            const directory = await directoryModel.find({ status: true });
             res.status(200).json({
                 success: true,
                 msg: " fetch  Successfully!!",
@@ -101,6 +101,7 @@ export const getOneDirectory = async (req, res) => {
 
     try {
         const directory = await directoryModel.findById(req.params.id);
+        console.log(directory.status)
         // console.log(category)
         res.status(200).json({
             success: true,
