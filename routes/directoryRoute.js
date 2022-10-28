@@ -27,7 +27,7 @@ const uploaderImage = multer({
     }
 });
 router.route("/directory/create/").post(isAuthenticatedUser, createDirectory)
-router.route("/directory/getAll/").get(getAllDirectory)
+router.route("/directory/getAll/").get(isAuthenticatedUser, getAllDirectory)
 router.route("/directory/getOne/:id").get(getOneDirectory)
 router.route("/directory/update/:id").put(isAuthenticatedUser, updateDirectory);
 router.route("/directory/delete/:id").delete(isAuthenticatedUser, deleteOneDirectory);
