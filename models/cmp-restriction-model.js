@@ -1,19 +1,26 @@
 import mongoose from "mongoose"
 const cmpRisSchema = new mongoose.Schema(
     {
-        About_Us: {
+        title: {
             type: String,
             required: true
+        },
+        page_data: {
+            type: String,
+            required: true
+        },
+        image:
+        {
+            public_id: {
+                type: String,
+
+            },
+            url: {
+                type: String,
+
+            },
         },
 
-        Terms_and_Conditions: {
-            type: String,
-            required: true
-        },
-        Privacy_Policy: {
-            type: String,
-            required: true
-        },
 
 
     }, { timestamps: true }
