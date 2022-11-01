@@ -4,7 +4,7 @@ import ErrorHander from "../Utils/errorhander.js"
 
 export const isAuthenticatedUser = async (req, res, next) => {
     try {
-        // const { token } = req.cookies;
+
         if (!req.headers.authorization) {
             return res.status(400).json({
                 success: false,
@@ -16,6 +16,7 @@ export const isAuthenticatedUser = async (req, res, next) => {
 
         //remove Bearer from token
         const fronttoken = getToken.authorization.slice(7);
+
 
         const frontdecoded = jwt.verify(fronttoken, process.env.JWT_SECRET);
 
