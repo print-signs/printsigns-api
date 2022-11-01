@@ -245,3 +245,25 @@ export const getSingleRegisterUser = async (req, res) => {
 
 
 //share app (api)
+export const shareApp = async (req, res) => {
+
+    try {
+        if (!process.env.APP_STORE_URL) {
+            return res.status(404).json({
+                success: false,
+                msg: "App URl not Found"
+            });
+        }
+        res.status(200).json({
+            success: true,
+            AppUrl: `${process.env.APP_STORE_URL}`,
+        });
+    } catch (error) {
+        // console.log(error)
+        res.status(500).json({
+            success: false,
+            msg: "Failled to fetch !!"
+        });
+    }
+
+};

@@ -128,8 +128,8 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
 
             to: `${user.email}`, // Change to your recipient
 
-            from: 'project.saleschampions@gmail.com', // Change to your verified sender
-            // from: 'project.edufuture@gmail.com', // Change to your verified sender
+            from: `${process.env.SEND_EMAIL_FROM}`, // Change to your verified sender
+
             subject: `CMP Password Recovery`,
             html: `your new password is: <br/> <strong> ${passwords}</strong><br/><br/>If you have not requested this email then, please ignore it.`
 
