@@ -153,7 +153,7 @@ export const deleteEvent = async (req, res) => {
         //-------------------------//
         const event = await Events.findByIdAndDelete(req.params.id)
         if (!event) {
-            return res.status(400).json({ message: 'Event Not Found' });
+            return res.status(404).json({ message: 'Event Not Found' });
         }
         await event.remove();
         res.status(200).json({
@@ -181,7 +181,7 @@ export const RegisterUserInEvent = async (req, res) => {
         })
         if (totalUserRegister) {
 
-            return res.status(500).json({
+            return res.status(400).json({
                 success: false,
                 msg: "You Have Already Registered for this Event"
             });
