@@ -17,9 +17,13 @@ export const isAuthenticatedUser = async (req, res, next) => {
         //remove Bearer from token
         const fronttoken = getToken.authorization.slice(7);
 
-
         const frontdecoded = jwt.verify(fronttoken, process.env.JWT_SECRET);
-
+        if (!frontdecoded) {
+            return res.status(200).json({
+                success: false,
+                message: "incorrect token",
+            });
+        }
         const fuser = await User.findById(frontdecoded.id);
 
         req.user = fuser;

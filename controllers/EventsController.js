@@ -242,3 +242,6 @@ export const getSingleRegisterUser = async (req, res) => {
         });
     }
 }
+
+
+//share app (api)
