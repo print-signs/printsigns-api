@@ -13,11 +13,11 @@ import {
 } from "../controllers/EventsController.js"
 const router = express.Router();
 import { isAuthenticatedUser, authorizeRoles } from "../middlewares/auth.js"
-router.route("/event/create/").post(isAuthenticatedUser, createEvent)
+router.route("/event/create/").post(isAuthenticatedUser, authorizeRoles("admin"), createEvent)
 router.route("/event/getAll/").get(getAllEvent)
 router.route("/event/getOne/:id").get(getOneEvent)
-router.route("/event/update/:id").put(isAuthenticatedUser, updateEvent);
-router.route("/event/delete/:id").delete(isAuthenticatedUser, deleteEvent);
+router.route("/event/update/:id").put(isAuthenticatedUser, authorizeRoles("admin"), updateEvent);
+router.route("/event/delete/:id").delete(isAuthenticatedUser, authorizeRoles("admin"), deleteEvent);
 //share app
 router.route("/app/share/").get(shareApp)
 //user 

@@ -181,7 +181,7 @@ export const RegisterUserInEvent = async (req, res) => {
         })
         if (totalUserRegister) {
 
-            return res.status(400).json({
+            return res.status(200).json({
                 success: false,
                 msg: "You Have Already Registered for this Event"
             });
