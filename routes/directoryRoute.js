@@ -6,7 +6,8 @@ import {
     deleteOneDirectory,
     getOneDirectory,
     getSelfDirectory,
-    setStatus
+    setStatus,
+    getAllDirectoryUser
 
 } from "../controllers/directoryController.js"
 const router = express.Router();
@@ -27,7 +28,9 @@ const uploaderImage = multer({
     }
 });
 router.route("/directory/create/").post(isAuthenticatedUser, createDirectory)
-router.route("/directory/getAll/").get(getAllDirectory)
+
+router.route("/directory/user/getAll/").get(getAllDirectoryUser)
+router.route("/directory/getAll/").get(isAuthenticatedUser, authorizeRoles('admin'), getAllDirectory)
 router.route("/directory/getOne/:id").get(getOneDirectory)
 router.route("/directory/update/:id").put(isAuthenticatedUser, updateDirectory);
 router.route("/directory/delete/:id").delete(isAuthenticatedUser, deleteOneDirectory);

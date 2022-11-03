@@ -57,7 +57,7 @@ export const createDirectory = async (req, res) => {
             data,
         });
     } catch (error) {
-        console.log(error)
+        // console.log(error)
         res.status(500).json({
             success: false,
             msg: "Failled to create !!"
@@ -65,31 +65,39 @@ export const createDirectory = async (req, res) => {
     }
 
 };
-
-//get All Product
-export const getAllDirectory = async (req, res) => {
+//get All Directory(User)
+export const getAllDirectoryUser = async (req, res) => {
 
     try {
-        console.log("hi")
-
-        if (req.user && req.user.role === "admin") {
-            const directory = await directoryModel.find();
-            // console.log(category)
-            return res.status(200).json({
-                success: true,
-                msg: " fetch  Successfully!!",
-                directory,
-            });
-        }
         const directory = await directoryModel.find({ status: true });
         res.status(200).json({
             success: true,
             msg: " fetch  Successfully!!",
             directory,
         });
+    }
+    catch (error) {
+        res.status(500).json({
+            success: false,
+            msg: "Failled to fetch !!"
+        });
+    }
 
+};
+
+//get All Directory(admin)
+export const getAllDirectory = async (req, res) => {
+
+    try {
+
+        const directory = await directoryModel.find();
+
+        res.status(200).json({
+            success: true,
+            msg: " fetch  Successfully!!",
+            directory,
+        });
     } catch (error) {
-        console.log(error)
         res.status(500).json({
             success: false,
             msg: "Failled to fetch !!"
@@ -102,7 +110,7 @@ export const getOneDirectory = async (req, res) => {
 
     try {
         const directory = await directoryModel.findById(req.params.id);
-        console.log(directory.status)
+        // console.log(directory.status)
         // console.log(category)
         res.status(200).json({
             success: true,
@@ -147,7 +155,7 @@ export const updateDirectory = async (req, res) => {
         });
 
     } catch (error) {
-        console.log(error)
+        // console.log(error)
         res.status(500).json({
             success: false,
             msg: "Failled to UpDate !!"
@@ -232,7 +240,7 @@ export const setStatus = async (req, res) => {
         // console.log(directory)
         res.status(200).json(directory);
     } catch (error) {
-        console.log(error);
+        // console.log(error);
         res.status(500).json({
             message: error.message
         });
