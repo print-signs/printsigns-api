@@ -70,25 +70,26 @@ export const createDirectory = async (req, res) => {
 export const getAllDirectory = async (req, res) => {
 
     try {
-        if (req.user.role === "admin") {
+        console.log("hi")
+
+        if (req.user && req.user.role === "admin") {
             const directory = await directoryModel.find();
             // console.log(category)
-            res.status(200).json({
+            return res.status(200).json({
                 success: true,
                 msg: " fetch  Successfully!!",
                 directory,
             });
         }
-        else {
-            const directory = await directoryModel.find({ status: true });
-            res.status(200).json({
-                success: true,
-                msg: " fetch  Successfully!!",
-                directory,
-            });
-        }
+        const directory = await directoryModel.find({ status: true });
+        res.status(200).json({
+            success: true,
+            msg: " fetch  Successfully!!",
+            directory,
+        });
 
     } catch (error) {
+        console.log(error)
         res.status(500).json({
             success: false,
             msg: "Failled to fetch !!"
