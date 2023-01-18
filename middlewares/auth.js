@@ -19,7 +19,7 @@ export const isAuthenticatedUser = async (req, res, next) => {
 
         const frontdecoded = jwt.verify(fronttoken, process.env.JWT_SECRET);
         if (!frontdecoded) {
-            return res.status(200).json({
+            return res.status(400).json({
                 success: false,
                 message: "incorrect token",
             });

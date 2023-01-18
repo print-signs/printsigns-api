@@ -23,35 +23,5 @@ app.use(fileUpload({
 //auth
 import user from "./routes/userRoute.js"
 app.use("/api/v1/", user);
-//category
-import category from "./routes/categoryRoute.js"
-app.use("/api", category);
-//directory
-import directory from "./routes/directoryRoute.js"
-app.use("/api", directory);
-//News
-import news from "./routes/newsRoute.js"
-app.use("/api", news);
-//Events
-import Event from "./routes/EventsRoute.js"
-app.use("/api", Event);
-//Offers
-import Offer from "./routes/OffersRoute.js"
-app.use("/api", Offer);
-//banner
-import banner from "./routes/bannerRoute.js"
-app.use("/api", banner);
-//cmp-Ristriction
-import cmpRistriction from "./routes/cmp-restriction-Route.js"
-app.use("/api", cmpRistriction);
-//feedback
-import feedback from "./routes/feedbackRoute.js"
-app.use("/api", feedback);
 
-//requirement
-import requirement from "./routes/RequirementRoute.js"
-app.use("/api", requirement);
-//requirement
-import faqs from "./routes/FaqsRoute.js"
-app.use("/api", faqs);
 export default app;

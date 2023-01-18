@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
     },
     phone: {
         type: Number,
-        required: [true, "Please Enter Your phone no."],
+        // required: [true, "Please Enter Your phone no."],
         maxLength: [12, "phone cannot exceed 12 characters"],
         minLength: [6, "phone should have more than 6 characters"],
     },

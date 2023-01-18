@@ -6,18 +6,24 @@ import sendToken from "../Utils/jwtToken.js"
 import sendEmail from "../Utils/sendEmail.js"
 import crypto from "crypto"
 import cloudinary from "cloudinary"
-import generator from 'generate-password'
 import password from 'secure-random-password'
 // 1.Register a User
 export const registerUser = async (req, res, next) => {
     try {
+        const { name, email, password, phone } = req.body;
+        let findUser = await User.findOne({ email })
+        if (findUser) {
+            return res
+                .status(400)
+                .json({ success: false, message: "User already exists" });
+        }
         const files = req.files.avatar;
         const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
             folder: "cmp-user/image",
         },
             function (error, result) { (result, error) });
 
-        const { name, email, password, phone } = req.body;
+
 
         const user = await User.create({
             name,
@@ -32,14 +38,9 @@ export const registerUser = async (req, res, next) => {
         sendToken(user, 201, res);
     } catch (e) {
         // console.log(e.message);
-        if (e.toString().includes('E11000 duplicate key error collection')) {
-            return res.status(400).json({
-                status: 'User Already Exists'
-            });
-        }
         return res
             .status(400)
-            .json({ status: 'Error Communicating with server' });
+            .json({ success: false, message: e.message });
     }
 
 };
@@ -66,11 +67,7 @@ export const loginUser = catchAsyncErrors(async (req, res, next) => {
     if (!isPasswordMatched) {
         return res.status(400).json({ message: 'Invalid Email or Password' });
     }
-    // const token = user.getJWTToken();
-    // res.status(201).json({
-    //     success: true,
-    //     token,
-    // })
+
     sendToken(user, 200, res);
 });
 
@@ -130,7 +127,7 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
 
             from: `${process.env.SEND_EMAIL_FROM}`, // Change to your verified sender
 
-            subject: `CMP Password Recovery`,
+            subject: `ATP Password Recovery`,
             html: `your new password is: <br/> <strong> ${passwords}</strong><br/><br/>If you have not requested this email then, please ignore it.`
 
         });
