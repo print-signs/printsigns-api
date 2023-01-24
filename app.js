@@ -21,7 +21,19 @@ app.use(fileUpload({
 }));
 
 //auth
-import user from "./routes/userRoute.js"
+import user from "./resources/user/userRoute.js"
 app.use("/api/v1/", user);
+//state
+import StateRouter from "./resources/setting/state/state_routes.js";
+app.use("/api/state", StateRouter);
+
+//city
+import CityRouter from "./resources/setting/city/city_routes.js";
+app.use("/api/city", CityRouter);
+
+//config
+import ConfigRouter from "./resources/setting/Configration/Config_routes.js";
+
+app.use("/api/config", ConfigRouter);
 
 export default app;

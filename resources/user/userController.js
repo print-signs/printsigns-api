@@ -1,14 +1,13 @@
-//require("dotenv").config({ path: "backend/config/config.env" });
-import ErrorHander from "../Utils/errorhander.js"
-import catchAsyncErrors from "../middlewares/catchAsyncErrors.js"
-import User from "../models/userModel.js"
-import sendToken from "../Utils/jwtToken.js"
-import sendEmail from "../Utils/sendEmail.js"
+import ErrorHander from "../../Utils/errorhander.js"
+import catchAsyncErrors from "../../middlewares/catchAsyncErrors.js"
+import User from "./userModel.js"
+import sendToken from "../../Utils/jwtToken.js"
+import sendEmail from "../../Utils/sendEmail.js"
 import crypto from "crypto"
 import cloudinary from "cloudinary"
 import password from 'secure-random-password'
 // 1.Register a User
-export const registerUser = async (req, res, next) => {
+export const registerUser = async (req, res) => {
     try {
         const { name, email, password, phone } = req.body;
         let findUser = await User.findOne({ email })
@@ -17,11 +16,14 @@ export const registerUser = async (req, res, next) => {
                 .status(400)
                 .json({ success: false, message: "User already exists" });
         }
-        const files = req.files.avatar;
-        const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
-            folder: "cmp-user/image",
-        },
-            function (error, result) { (result, error) });
+        if (req.files) {
+            const files = req.files.avatar;
+            const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
+                folder: "ATM/user-image",
+            },
+                function (error, result) { (result, error) });
+        }
+
 
 
 
@@ -30,14 +32,14 @@ export const registerUser = async (req, res, next) => {
             email,
             password,
             phone,
-            avatar: {
-                public_id: myCloud.public_id,
-                url: myCloud.secure_url,
-            },
+            // avatar: {
+            //     public_id: myCloud.public_id,
+            //     url: myCloud.secure_url,
+            // },
         });
         sendToken(user, 201, res);
     } catch (e) {
-        // console.log(e.message);
+
         return res
             .status(400)
             .json({ success: false, message: e.message });
@@ -46,30 +48,36 @@ export const registerUser = async (req, res, next) => {
 };
 
 // 2.Login User
-export const loginUser = catchAsyncErrors(async (req, res, next) => {
+export const loginUser = async (req, res, next) => {
     const { email, password } = req.body;
-
     // checking if user has given password and email both
 
-    if (!email || !password) {
-        return next(res.status(400).json({ message: 'Please Enter Email & Password' }));
+    try {
+        if (!email || !password) {
+            return res.status(400).json({ message: 'Please Enter Email & Password' });
+        }
+
+        const user = await User.findOne({ email }).select("+password");
+
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid Email or Password' });
+        }
+
+
+        const isPasswordMatched = await user.comparePassword(password);
+
+        if (!isPasswordMatched) {
+            return res.status(400).json({ message: 'Invalid Email or Password' });
+        }
+
+        sendToken(user, 200, res);
+    } catch (error) {
+        return res
+            .status(500)
+            .json({ message: "Something went wrong!", error: error?.message || "" });
     }
 
-    const user = await User.findOne({ email }).select("+password");
-
-    if (!user) {
-        return res.status(400).json({ message: 'Invalid Email or Password' });
-    }
-
-
-    const isPasswordMatched = await user.comparePassword(password);
-
-    if (!isPasswordMatched) {
-        return res.status(400).json({ message: 'Invalid Email or Password' });
-    }
-
-    sendToken(user, 200, res);
-});
+};
 
 
 // 3.Logout User
@@ -88,25 +96,19 @@ export const logout = catchAsyncErrors(async (req, res, next) => {
 
 // 4.Forgot Password
 
-export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
+export const forgotPassword = async (req, res, next) => {
     const user = await User.findOne({ email: req.body.email });
 
     if (!user) {
-        return next(new ErrorHander("User not found", 404));
+        return res.status(404).json({ message: "User not found" });
+
     }
     // Get ResetPassword Token
     const resetToken = user.getResetPasswordToken();//call function
 
     //save database reset token
     await user.save({ validateBeforeSave: false });
-    //create link for send mail
-    // const resetPasswordUrl = `http://localhost:5000/api/v1/user/password/reset/${resetToken}` //send from localhost
-    //send from anyhost
-    // const resetPasswordUrl = `${req.protocol}://${req.get(
-    //     "host"
-    // )}/api/v1/user/password/reset/${resetToken}`;
-    //const resetPasswordUrl = `${process.env.FRONTEND_URL}:/api/user/password/reset/${resetToken}`;
-    //const resetPasswordUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
+
     const passwords = password.randomPassword({
         length: 12,
         characters: [
@@ -142,9 +144,9 @@ export const forgotPassword = catchAsyncErrors(async (req, res, next) => {
 
         await user.save({ validateBeforeSave: false });
 
-        return next(new ErrorHander(error.message, 500));
+        return res.status(500).json({ message: "Something went wrong!", error: error?.message || "" });
     }
-});
+}
 
 
 // 5.Reset Password
@@ -242,17 +244,25 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
     };
 
     if (req.files) {
-        const files = req.files.avatar;
+        const userImage = req.files?.avatar;
         const user = await User.findById(req.user.id);
 
-        const imageId = user.avatar.public_id;
 
-        await cloudinary.uploader.destroy(imageId)
+        if (user?.avatar) {
+            const imageId = user?.avatar?.public_id;
 
-        const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
-            folder: "image",
-        },
-            function (error, result) { (result, error) });
+            await cloudinary.uploader.destroy(imageId)
+        }
+
+
+
+        const myCloud = await cloudinary.v2.uploader.upload(userImage.tempFilePath,
+            {
+                folder: "ATM/user-image",
+
+            });
+
+
 
         newUserData.avatar = {
             public_id: myCloud.public_id,

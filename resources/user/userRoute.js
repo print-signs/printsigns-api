@@ -10,8 +10,8 @@ import {
     updateProfile,
     getSingleUser,
     getAllUser
-} from "../controllers/userController.js"
-import { isAuthenticatedUser, authorizeRoles } from "../middlewares/auth.js"
+} from "./userController.js"
+import { isAuthenticatedUser, authorizeRoles } from "../../middlewares/auth.js"
 
 const router = express.Router();
 
