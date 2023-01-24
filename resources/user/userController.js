@@ -19,7 +19,7 @@ export const registerUser = async (req, res) => {
         if (req.files) {
             const files = req.files.avatar;
             const myCloud = await cloudinary.uploader.upload(files.tempFilePath, {
-                folder: "ATM/user-image",
+                folder: "ATP/user-image",
             },
                 function (error, result) { (result, error) });
         }
@@ -258,7 +258,7 @@ export const updateProfile = catchAsyncErrors(async (req, res, next) => {
 
         const myCloud = await cloudinary.v2.uploader.upload(userImage.tempFilePath,
             {
-                folder: "ATM/user-image",
+                folder: "ATP/user-image",
 
             });
 

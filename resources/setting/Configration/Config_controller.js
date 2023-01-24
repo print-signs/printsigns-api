@@ -218,36 +218,34 @@ const addLogo = async (req, res) => {
   try {
     const configuration = await Config.find();
 
-    // console.log(req.files);
-    console.log(configuration.length)
-    //   const result1 = await cloudinary.uploader.upload(req.files.Headerlogo[0].path,{folder: 'Vardhaman'});
-    //   const result2 = await cloudinary.uploader.upload(req.files.Footerlogo[0].path,{folder: 'Vardhaman'});
-    //   const result3 = await cloudinary.uploader.upload(req.files.Adminlogo[0].path,{folder: 'Vardhaman'});
 
-    let result1 = req.body.Headerlogo ? req.body.Headerlogo : "";
-    let result2 = req.body.Footerlogo ? req.body.Footerlogo : "";
-    let result3 = req.body.Adminlogo ? req.body.Adminlogo : "";
+    console.log(req.files);
+
+
+    let result1
+    let result2
+    let result3
     // console.log(req.files.Headerlogo)
     if (req.files.Headerlogo) {
-      console.log(req.files.Headerlogo[0].path)
 
-      const result = await cloudinary.uploader.upload(
-        req.files.Headerlogo[0].path,
+
+      const result = await cloudinary.v2.uploader.upload(
+        req.files.Headerlogo.tempFilePath,
         { folder: "ATP/Logo" }
       );
       result1 = result.secure_url;
     }
     if (req.files.Footerlogo) {
-      const result = await cloudinary.uploader.upload(
-        req.files.Footerlogo[0].path,
+      const result = await cloudinary.v2.uploader.upload(
+        req.files.Footerlogo.tempFilePath,
         { folder: "ATP/Logo" }
       );
       result2 = result.secure_url;
     }
     if (req.files.Adminlogo) {
-      console.log(req.files.Adminlogo[0].path)
-      const result = await cloudinary.uploader.upload(
-        req.files.Adminlogo[0].path,
+      console.log(req.files.Adminlogo.path)
+      const result = await cloudinary.v2.uploader.upload(
+        req.files.Adminlogo.tempFilePath,
         { folder: "ATP/Logo" }
       );
       result3 = result.secure_url;
@@ -273,9 +271,7 @@ const addLogo = async (req, res) => {
         });
       }
     } else {
-      //     const result1 = await cloudinary.uploader.upload(req.files.Headerlogo[0].path,{folder: 'Vardhaman'});
-      //     const result2 = await cloudinary.uploader.upload(req.files.Footerlogo[0].path,{folder: 'Vardhaman'});
-      //     const result3 = await cloudinary.uploader.upload(req.files.Adminlogo[0].path,{folder: 'Vardhaman'});
+
 
       const updateLogo = await Config.updateOne(
         {},

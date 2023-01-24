@@ -23,6 +23,10 @@ app.use(fileUpload({
 //auth
 import user from "./resources/user/userRoute.js"
 app.use("/api/v1/", user);
+
+//Temple
+import TempleRouter from "./resources/Temple/TempleRoute.js";
+app.use("/api/temple", TempleRouter);
 //state
 import StateRouter from "./resources/setting/state/state_routes.js";
 app.use("/api/state", StateRouter);
