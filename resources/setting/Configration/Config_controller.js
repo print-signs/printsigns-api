@@ -219,7 +219,7 @@ const addLogo = async (req, res) => {
     const configuration = await Config.find();
 
 
-    console.log(req.files);
+    // console.log(req.files);
 
 
     let result1
@@ -243,7 +243,7 @@ const addLogo = async (req, res) => {
       result2 = result.secure_url;
     }
     if (req.files.Adminlogo) {
-      console.log(req.files.Adminlogo.path)
+      // console.log(req.files.Adminlogo.path)
       const result = await cloudinary.v2.uploader.upload(
         req.files.Adminlogo.tempFilePath,
         { folder: "ATP/Logo" }
@@ -251,9 +251,9 @@ const addLogo = async (req, res) => {
       result3 = result.secure_url;
     }
 
-    console.log(result1);
-    console.log(result2);
-    console.log(result3);
+    // console.log(result1);
+    // console.log(result2);
+    // console.log(result3);
 
     if (configuration.length === 0) {
       const createLogo = await Config.create({
