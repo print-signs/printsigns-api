@@ -23,7 +23,9 @@ app.use(fileUpload({
 //auth
 import user from "./resources/user/userRoute.js"
 app.use("/api/v1/", user);
-
+//Product
+import ProductRouter from "./resources/Products/ProductRoute.js";
+app.use("/api", ProductRouter);
 //Temple
 import TempleRouter from "./resources/Temple/TempleRoute.js";
 app.use("/api/temple", TempleRouter);

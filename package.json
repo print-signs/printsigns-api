@@ -1,7 +1,7 @@
 {
   "name": "atp-backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "atp",
   "main": "server.js",
   "type": "module",
   "scripts": {
