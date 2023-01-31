@@ -144,7 +144,7 @@ export const updateProduct = async (req, res) => {
         // console.log(error)
         res.status(500).json({
             success: false,
-            msg: error.message ? error.message : "Something went wrong!"
+            msg: error.message ? error.message : "Something went wrong!",
         });
 
     }
