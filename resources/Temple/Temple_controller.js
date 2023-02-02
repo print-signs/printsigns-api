@@ -68,13 +68,16 @@ const getTempleById = async (req, res) => {
 const getTempleByIdPopulated = async (req, res) => {
     try {
         const entity = await Temple.findById(req.params.id).populate({
-            // path: "grades sections houses",
-            sort: "name",
+            path: "city",
+            select: "city_name state -_id",
+            populate: {
+                path: "state",
+                select: "state_name state_code -_id",
+            },
         });
-        const newId = new mongoose.Types.ObjectId();
-        return res.status(200).json({ status: "OK", data: entity, _id: newId });
+        return res.status(200).json({ status: "OK", data: entity });
     } catch (err) {
-        return res.status(500).json({ message: "Unable to get menu items." });
+        return res.status(500).json({ message: "Unable to get franchiee ." });
     }
 };
 
@@ -196,89 +199,7 @@ const findTempleByURL = async (req, res) => {
     }
 };
 
-// const getTempleProductsForChild = async (req, res) => {
-//     try {
-//         const Temple = await Temple.findById(req.parent.Temple);
-//         if (!Temple?.option)
-//             return res.status(400).json({ message: "No option selected by Temple!" });
 
-//         const child = await Student.findById(req.params.id);
-//         if (!child?._id)
-//             return res.status(400).json({ message: "Child not found!" });
-
-//         if (Temple.option === "group") {
-//             const groups = await Group.find({
-//                 Temple: req.parent.Temple,
-//                 gender: child.gender,
-//                 grades: { $in: child.grade },
-//                 house: child.house,
-//             })
-//                 .populate({
-//                     path: "grades house",
-//                     select: "name",
-//                 })
-//                 .populate({
-//                     path: "products",
-//                     select: "-createdAt -updatedAt",
-//                     populate: {
-//                         path: "images category variants",
-//                         select: "url name size weight price tax",
-//                     },
-//                 });
-//             return res.status(200).json({
-//                 status: "OK",
-//                 Temple_name: Temple.name,
-//                 option: "group",
-//                 data: groups,
-//             });
-//         }
-//         const bundles = await Bundle.find({
-//             Temple: req.parent.Temple,
-//             gender: child.gender,
-//             grades: { $in: child.grade },
-//             house: child.house,
-//         })
-//             .populate({
-//                 path: "grades house",
-//                 select: "name",
-//             })
-//             .populate({
-//                 path: "products.product",
-//                 select: "-createdAt -updatedAt",
-//                 populate: {
-//                     path: "images category variants",
-//                     select: "url name size weight price tax",
-//                 },
-//             });
-//         return res.status(200).json({
-//             status: "OK",
-//             Temple_name: Temple.name,
-//             option: "bundle",
-//             data: bundles,
-//         });
-//     } catch (error) {
-//         return res.status(500).json({ message: "Something went wrong!" });
-//     }
-// };
-
-// const getTempleGradesAndHousesByParent = async (req, res) => {
-//     try {
-//         const Temple = await Temple.findById(req.parent.Temple).populate({
-//             path: "grades houses sections",
-//             select: "name",
-//             sort: "name",
-//         });
-//         return res.status(200).json({
-//             status: "ok",
-//             Temple_name: Temple.name,
-//             grades: Temple.grades,
-//             houses: Temple.houses,
-//             sections: Temple?.sections || [],
-//         });
-//     } catch (error) {
-//         return res.status(500).json({ message: "Something went wrong!" });
-//     }
-// };
 
 export {
     addTemple,

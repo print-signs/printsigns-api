@@ -3,12 +3,14 @@ const { Schema, model } = mongoose;
 
 const TempleSchema = new Schema(
     {
-        name: { type: String, default: "" },
+        name: { type: String, required: true },
 
-        address_line_1: { type: String, default: "" },
-        address_line_2: { type: String, default: "" },
-
+        address_line_1: { type: String, required: true },
+        address_line_2: { type: String, required: true },
+        contact_Number: { type: Number, required: true },
+        contact_Person_Name: { type: String, required: true },
         city: { type: mongoose.Schema.ObjectId, ref: "City" },
+
 
         products: [
             {

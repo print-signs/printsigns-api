@@ -26,6 +26,9 @@ app.use("/api/v1/", user);
 //Product
 import ProductRouter from "./resources/Products/ProductRoute.js";
 app.use("/api", ProductRouter);
+//Order
+import orderRoute from './resources/Orders/orderRoute.js'
+app.use("/api", orderRoute);
 //Temple
 import TempleRouter from "./resources/Temple/TempleRoute.js";
 app.use("/api/temple", TempleRouter);
@@ -36,7 +39,9 @@ app.use("/api/state", StateRouter);
 //city
 import CityRouter from "./resources/setting/city/city_routes.js";
 app.use("/api/city", CityRouter);
-
+//Tax
+import TaxRouter from "./resources/Tax/tax_routes.js";
+app.use("/api/tax", TaxRouter);
 //config
 import ConfigRouter from "./resources/setting/Configration/Config_routes.js";
 
