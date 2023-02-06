@@ -18,6 +18,7 @@ const TempleSchema = new Schema(
                 ref: "Product",
             },
         ],
+        price_Lable: { type: String, default: "" },
         url: { type: String, default: "" },
         short_url: { type: String, default: "" },
         banner: { type: Object, default: { url: "", public_id: "" } },

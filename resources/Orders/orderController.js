@@ -53,7 +53,7 @@ export const getAllOrder = async (req, res) => {
         const order = await Order.find().populate({
             path: "user",
             select: "name -_id",
-        });
+        }).sort({ createdAt: -1 });
         if (order) {
             res.status(201).json({
                 success: true,
@@ -69,3 +69,32 @@ export const getAllOrder = async (req, res) => {
     }
 
 }
+export const deleteOneOrder = async (req, res) => {
+    try {
+        if (!req?.user) return res.status(400).json({ message: "please login !" });
+        if (!req.params.id) return res.status(400).json({ message: "please Provide Order Id" });
+        const getOrder = await Order.findById(req.params.id);
+        if (!getOrder) {
+            return res.status(404).json({
+                success: false,
+                msg: "No Order  Found!"
+            });
+
+        }
+        const order = await Order.findByIdAndDelete(req.params.id)
+
+        await order.remove();
+        res.status(200).json({
+            success: true,
+            msg: "Order Deleted Successfully!!",
+
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ msg: error.message ? error.message : 'Something went Wrong' })
+    }
+
+}
+
+

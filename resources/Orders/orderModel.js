@@ -10,7 +10,7 @@ const orderSchema = new mongoose.Schema(
             required: true,
         },
 
-        shippingInfo: [{
+        shippingInfo: {
             name: { type: String, required: true, },
             address: {
                 type: String,
@@ -44,7 +44,7 @@ const orderSchema = new mongoose.Schema(
                 type: mongoose.Schema.ObjectId,
                 ref: "Temple",
             },
-        }],
+        },
         orderItems: [
             {
                 name: {
@@ -64,6 +64,24 @@ const orderSchema = new mongoose.Schema(
                     type: String,
                     default: '',
                 },
+                taxRate: {
+                    type: Number,
+                    default: 0
+                },
+
+                PriceWithTax: {
+                    type: Number,
+                    default: '',
+                },
+                taxName: {
+                    type: String,
+                    default: '',
+                },
+                taxId: {
+                    type: String,
+                    default: ''
+                },
+
                 product: {
                     type: mongoose.Schema.ObjectId,
                     ref: "Product",

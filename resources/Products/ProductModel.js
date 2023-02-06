@@ -18,17 +18,39 @@ const productSchema = new Schema({
         required: [true, "Please Enter product Price"],
         maxLength: [8, "Price cannot exceed 8 characters"],
     },
+    base_Price_With_Tax: {
+        type: Number,
+        required: [true, "Please Enter product Price"],
+        maxLength: [8, "Price cannot exceed 8 characters"],
+    },
+
     price_Level_2: {
         type: Number,
         required: true,
 
         maxLength: [8, "price leval2 cannot exceed 8 characters"],
     },
+    price_Level_2_With_Tax: {
+        type: Number,
+        required: [true, "Please Enter product Price"],
+        maxLength: [8, "Price cannot exceed 8 characters"],
+    },
+
     price_Level_3: {
         type: Number,
         required: true,
 
         maxLength: [8, "price leval3 cannot exceed 8 characters"],
+    },
+    price_Level_3_With_Tax: {
+        type: Number,
+        required: [true, "Please Enter product Price"],
+        maxLength: [8, "Price cannot exceed 8 characters"],
+    },
+    taxId: {
+        type: Schema.Types.ObjectId,
+
+        ref: "Tax"
     },
 
     image:

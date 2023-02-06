@@ -29,6 +29,7 @@ export const createProduct = async (req, res) => {
 
         const data = await Product.create({
             ...req.body,
+
             image: {
                 public_id: myCloud.public_id,
                 url: myCloud.secure_url,
@@ -99,10 +100,15 @@ export const updateProduct = async (req, res) => {
             name: req.body.name,
             description: req.body.description,
             base_Price: req.body.base_Price,
+            base_Price_With_Tax: req.body.base_Price_With_Tax,
             price_Level_2: req.body.price_Level_2,
+            price_Level_2_With_Tax: req.body.price_Level_2_With_Tax,
             price_Level_3: req.body.price_Level_3,
-        };
+            price_Level_3_With_Tax: req.body.price_Level_3_With_Tax,
 
+
+
+        }
 
         if (req.files) {
             const image_file = req.files.image;
