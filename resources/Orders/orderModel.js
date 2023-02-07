@@ -28,10 +28,7 @@ const orderSchema = new mongoose.Schema(
                 default: ''
             },
 
-            // country: {
-            //     type: String,
-            //     required: true,
-            // },
+
             pinCode: {
                 type: Number,
                 default: '',
@@ -40,6 +37,7 @@ const orderSchema = new mongoose.Schema(
                 type: Number,
                 default: ''
             },
+
             Franchisee: {
                 type: mongoose.Schema.ObjectId,
                 ref: "Temple",
@@ -64,19 +62,13 @@ const orderSchema = new mongoose.Schema(
                     type: String,
                     default: '',
                 },
-                taxRate: {
+
+
+                price_With_Tax: {
                     type: Number,
-                    default: 0
+                    default: '',
                 },
 
-                PriceWithTax: {
-                    type: Number,
-                    default: '',
-                },
-                taxName: {
-                    type: String,
-                    default: '',
-                },
                 taxId: {
                     type: String,
                     default: ''

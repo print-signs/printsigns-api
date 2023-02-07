@@ -34,12 +34,14 @@ export const createOrder = async (req, res) => {
         res.status(201).json({
             success: true,
             order,
-            msg: 'order Created',
+            message: 'order Created',
         });
 
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ msg: 'Something went Wrong' })
+        res.status(500).json({
+            success: false,
+            message: error.message ? error.message : 'Something went Wrong',
+        });
     }
 
 }
@@ -58,14 +60,111 @@ export const getAllOrder = async (req, res) => {
             res.status(201).json({
                 success: true,
                 order,
-                msg: 'All Order Fetched',
+                message: 'All Order Fetched',
             });
         }
 
 
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ msg: error.message ? error.message : 'Something went Wrong' })
+        res.status(500).json({
+            success: false,
+            message: error.message ? error.message : 'Something went Wrong',
+        });
+    }
+
+}
+export const getSingleOrder = async (req, res) => {
+    try {
+        if (!req?.user) return res.status(400).json({ message: "please login !" });
+        // console.log(req?.user)
+        if (!req.params.id) return res.status(400).json({ message: "please Provide Order Id" });
+
+
+
+        const order = await Order.findById(req.params.id).populate({
+            path: "user",
+            select: "name -_id",
+
+
+        }).populate({
+            path: "shippingInfo",
+
+            populate: {
+                path: "Franchisee",
+                select: "banner price_Lable ",
+            },
+        }).sort({ createdAt: -1 });
+        if (order) {
+            res.status(201).json({
+                success: true,
+                order,
+                message: ' Order Fetched',
+            });
+        }
+
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message ? error.message : 'Something went Wrong',
+        });
+
+    }
+
+}
+
+export const EditOrderBeforePayment = async (req, res) => {
+    try {
+        if (!req?.user) return res.status(400).json({ message: "please login !" });
+        // console.log(req?.user)
+        if (!req.params.id) return res.status(400).json({ message: "please Provide Order Id" });
+
+
+
+        const order = await Order.findById(req.params.id)
+        if (order) {
+            if (order.isPaid === false) {
+
+
+
+                if (order.user.toString() === req.user._id.toString()) {
+                    req.body.user = req.user._id
+
+                    const ModifyOrder = await Order.findByIdAndUpdate(req.params.id, req.body,
+
+                        {
+                            new: true,
+                            runValidators: true,
+                            useFindAndModify: false,
+                        }
+
+                    );
+                    res.status(200).json({
+                        success: true,
+                        order: ModifyOrder,
+                        message: ' Order Updated',
+                    });
+                }
+                else {
+                    return res.status(400).json({ message: 'You not created This So You Can not Edit this Order !! ' })
+
+                }
+
+
+            }
+            else {
+                return res.status(400).json({ message: 'order can not Edited Because Payment Done !! ' })
+
+            }
+
+        }
+
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message ? error.message : 'Something went Wrong',
+        });
     }
 
 }
@@ -77,7 +176,7 @@ export const deleteOneOrder = async (req, res) => {
         if (!getOrder) {
             return res.status(404).json({
                 success: false,
-                msg: "No Order  Found!"
+                message: "No Order  Found!"
             });
 
         }
@@ -86,13 +185,15 @@ export const deleteOneOrder = async (req, res) => {
         await order.remove();
         res.status(200).json({
             success: true,
-            msg: "Order Deleted Successfully!!",
+            message: "Order Deleted Successfully!!",
 
         });
 
     } catch (error) {
-        console.log(error);
-        res.status(500).json({ msg: error.message ? error.message : 'Something went Wrong' })
+        res.status(500).json({
+            success: false,
+            message: error.message ? error.message : 'Something went Wrong',
+        });
     }
 
 }
