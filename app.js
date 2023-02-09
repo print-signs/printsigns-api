@@ -29,9 +29,10 @@ app.use("/api", ProductRouter);
 //Order
 import orderRoute from './resources/Orders/orderRoute.js'
 app.use("/api", orderRoute);
-//Temple
-import TempleRouter from "./resources/Temple/TempleRoute.js";
-app.use("/api/temple", TempleRouter);
+
+//Franchisee
+import FranchiseeRouter from "./resources/Franchisee/FranchiseeRoute.js";
+app.use("/api/franchisee", FranchiseeRouter);
 //state
 import StateRouter from "./resources/setting/state/state_routes.js";
 app.use("/api/state", StateRouter);
