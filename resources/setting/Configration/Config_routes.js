@@ -29,6 +29,7 @@ router.route("/address").post(isAuthenticatedUser, authorizeRoles("admin"), addA
 // router.route("/scrollText").post(isAuthenticatedUser, authorizeRoles("admin"), addScrollText);
 router.route("/logo").post(isAuthenticatedUser, authorizeRoles("admin"), addLogo);
 router.route("/").get(getConfig).delete(isAuthenticatedUser, authorizeRoles("admin"), deleteConfig);
+
 router
   .route("/termsofuse")
   .get(isAuthenticatedUser, authorizeRoles("admin"), getTermsOfUse)

@@ -15,7 +15,10 @@ const FranchiseeSchema = new Schema(
         }, email: {
             type: String,
             required: [true, "Please Enter Your Email"],
-            unique: true,
+
+            unique: [true, "Email already exist ! please try with diffent email"],
+
+
             validate: [validator.isEmail, "Please Enter a valid Email"],
         },
         password: {
@@ -42,6 +45,11 @@ const FranchiseeSchema = new Schema(
         pin_Code: { type: Number, required: true },
         short_url: { type: String, default: "" },
         banner: { type: Object, default: { url: "", public_id: "" } },
+        verify: {
+            type: Boolean,
+            required: true,
+            default: false
+        }
     },
     { timestamps: true }
 );

@@ -31,8 +31,8 @@ import orderRoute from './resources/Orders/orderRoute.js'
 app.use("/api", orderRoute);
 
 //Franchisee
-import FranchiseeRouter from "./resources/Franchisee/FranchiseeRoute.js";
-app.use("/api/franchisee", FranchiseeRouter);
+import FranchiseeRouter from "./resources/Temple/FranchiseeRoute.js";
+app.use("/api/franchisee/", FranchiseeRouter);
 //state
 import StateRouter from "./resources/setting/state/state_routes.js";
 app.use("/api/state", StateRouter);
@@ -46,6 +46,6 @@ app.use("/api/tax", TaxRouter);
 //config
 import ConfigRouter from "./resources/setting/Configration/Config_routes.js";
 
-app.use("/api/config", ConfigRouter);
+app.use("/api/config", ConfigRouter)
 
 export default app;
