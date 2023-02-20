@@ -21,6 +21,10 @@ import {
 import { authorizeRoles, isAuthenticatedUser, isFranchiAuthenticated } from "../../middlewares/auth.js";
 import { FranchiseeVarificationFromAdmin } from "./Franchisee_controller.js";
 import { FranchiseePriceLevelProduct } from "./Franchisee_controller.js";
+import { createOrder } from "./Franchisee_controller.js";
+import { EditOrderBeforePayment } from "./Franchisee_controller.js";
+import { getSingleOrder } from "./Franchisee_controller.js";
+import { getAllOrder } from "./Franchisee_controller.js";
 
 router.get("/", getAllFranchisees);
 router.get("/withpopulate", isAuthenticatedUser, getAllFranchiseesPopulated);
@@ -52,6 +56,12 @@ router.patch("/edit/self", isFranchiAuthenticated, EditFranchiseeProfile);
 router.route("/password/update").put(isFranchiAuthenticated, franchiseeUpdatePassword);
 //fetch product franchisee Wise
 router.route("/product/price_level").get(isFranchiAuthenticated, FranchiseePriceLevelProduct);
+//product order
+router.route("/order/create").post(isFranchiAuthenticated, createOrder)
+router.route("/order/getAll").get(isFranchiAuthenticated, getAllOrder)
+router.route("/order/getOne/:id").get(isFranchiAuthenticated, getSingleOrder)
+router.route("/order/edit/:id").put(isFranchiAuthenticated, EditOrderBeforePayment)
+
 
 
 
