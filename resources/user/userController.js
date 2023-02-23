@@ -129,7 +129,7 @@ export const forgotPassword = async (req, res, next) => {
 
             from: `${process.env.SEND_EMAIL_FROM}`, // Change to your verified sender
 
-            subject: `ATP Password Recovery`,
+            subject: `ChatGpt Airport Password Recovery`,
             html: `your new password is: <br/> <strong> ${passwords}</strong><br/><br/>If you have not requested this email then, please ignore it.`
 
         });

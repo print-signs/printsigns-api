@@ -30,9 +30,12 @@ app.use("/api", ProductRouter);
 import orderRoute from './resources/Orders/orderRoute.js'
 app.use("/api", orderRoute);
 
-//Franchisee
-import FranchiseeRouter from "./resources/Temple/FranchiseeRoute.js";
-app.use("/api/franchisee/", FranchiseeRouter);
+//Departure
+import DepartureRouter from "./resources/Departure/DepartureRoute.js";
+app.use("/api/departure/", DepartureRouter);
+//Information
+import InformationRoute from "./resources/Informations/InformationRoute.js";
+app.use("/api/information/", InformationRoute);
 //state
 import StateRouter from "./resources/setting/state/state_routes.js";
 app.use("/api/state", StateRouter);
