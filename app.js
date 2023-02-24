@@ -22,33 +22,34 @@ app.use(fileUpload({
 
 //auth
 import user from "./resources/user/userRoute.js"
+import ProductRouter from "./resources/Products/ProductRoute.js";
+import orderRoute from './resources/Orders/orderRoute.js'
+import DepartureRouter from "./resources/Departure/DepartureRoute.js";
+import InformationRoute from "./resources/Informations/InformationRoute.js";
+import ComplaintRoute from "./resources/Complaints/ComplaintRoute.js";
+
+import StateRouter from "./resources/setting/state/state_routes.js";
+import CityRouter from "./resources/setting/city/city_routes.js";
+import ConfigRouter from "./resources/setting/Configration/Config_routes.js";
+import TaxRouter from "./resources/Tax/tax_routes.js";
 app.use("/api/v1/", user);
 //Product
-import ProductRouter from "./resources/Products/ProductRoute.js";
 app.use("/api", ProductRouter);
 //Order
-import orderRoute from './resources/Orders/orderRoute.js'
 app.use("/api", orderRoute);
-
 //Departure
-import DepartureRouter from "./resources/Departure/DepartureRoute.js";
 app.use("/api/departure/", DepartureRouter);
 //Information
-import InformationRoute from "./resources/Informations/InformationRoute.js";
 app.use("/api/information/", InformationRoute);
+//Complaints
+app.use("/api/complaint/", ComplaintRoute);
 //state
-import StateRouter from "./resources/setting/state/state_routes.js";
 app.use("/api/state", StateRouter);
-
 //city
-import CityRouter from "./resources/setting/city/city_routes.js";
 app.use("/api/city", CityRouter);
 //Tax
-import TaxRouter from "./resources/Tax/tax_routes.js";
 app.use("/api/tax", TaxRouter);
 //config
-import ConfigRouter from "./resources/setting/Configration/Config_routes.js";
-
 app.use("/api/config", ConfigRouter)
 
 export default app;

@@ -8,7 +8,9 @@ import {
   getConfig,
   // addScrollText,
   addTermsOfUse,
+  addApplicationName,
   getTermsOfUse,
+  addCopyRightMessage,
 } from "./Config_controller.js";
 import { upload } from "../../../Utils/cloudinary.js";
 
@@ -25,10 +27,15 @@ const router = Router();
 
 // router.route("/gst").post(isAuthenticatedUser, authorizeRoles("admin"), addGST);
 router.route("/social").post(isAuthenticatedUser, authorizeRoles("admin"), addSocialMedia);
+router.route("/application/name").post(isAuthenticatedUser, authorizeRoles("admin"), addApplicationName);
+router.route("/copyright/message").post(isAuthenticatedUser, authorizeRoles("admin"), addCopyRightMessage);
+
+
+
 router.route("/address").post(isAuthenticatedUser, authorizeRoles("admin"), addAddress);
 // router.route("/scrollText").post(isAuthenticatedUser, authorizeRoles("admin"), addScrollText);
 router.route("/logo").post(isAuthenticatedUser, authorizeRoles("admin"), addLogo);
-router.route("/").get(getConfig).delete(isAuthenticatedUser, authorizeRoles("admin"), deleteConfig);
+router.route("/").get(getConfig).delete(isAuthenticatedUser, authorizeRoles("admin"), deleteConfig)
 
 router
   .route("/termsofuse")

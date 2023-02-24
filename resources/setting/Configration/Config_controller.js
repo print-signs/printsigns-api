@@ -1,50 +1,105 @@
 import { Config } from "./Config_model.js";
 import cloudinary from "../../../Utils/cloudinary.js";
-// // Add GST
-// const addGST = async (req, res) => {
-//   const { gst } = req.body;
-//   try {
-//     if (!gst) {
-//       return res.status(400).json({
-//         status: "failed",
-//         message: "Please Provide Valid GST Value",
-//       });
-//     }
-//     const configuration = await Config.find();
 
-//     if (configuration.length === 0) {
-//       const createGst = await Config.create({
-//         gst,
-//       });
+//Add app Name
+// Add Social Media
 
-//       if (createGst) {
-//         return res.status(201).json({
-//           status: "success",
-//           message: "GST Created",
-//         });
-//       }
-//     } else {
-//       const updateGst = await Config.updateOne(
-//         {},
-//         {
-//           $set: {
-//             gst,
-//           },
-//         }
-//       );
+export const addApplicationName = async (req, res) => {
 
-//       if (updateGst) {
-//         return res.status(200).json({
-//           status: "success",
-//           message: "Updated GST Successfully",
-//         });
-//       }
-//     }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
 
+  try {
+    if (req.body === '') {
+      return res.status(201).json({
+        status: "false",
+        message: "please enter application  Name",
+      });
+    }
+    const { appName } =
+      req.body;
+
+
+    const applicationNam = await Config.find()
+    if (applicationNam.length === 0) {
+      const applicationName = await Config.create({
+        appName
+      });
+
+      if (applicationName) {
+        return res.status(201).json({
+          status: "success",
+          message: "Added application Name Successfully",
+        });
+      }
+    } else {
+      const updateApp = await Config.updateOne({
+
+        appName:
+          appName
+
+
+      }
+      );
+
+      if (updateApp) {
+        return res.status(200).json({
+          status: "success",
+          message: "Updated Application Name Successfully",
+        });
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+//
+export const addCopyRightMessage = async (req, res) => {
+
+
+  try {
+    if (req.body === '') {
+      return res.status(201).json({
+        status: "false",
+        message: "please enter CopyRight Message",
+      });
+    }
+    const { copyright } =
+      req.body;
+
+
+    const application = await Config.find()
+    if (application.length === 0) {
+      const applicationName = await Config.create({
+        copyrightMessage: copyright
+      });
+
+      if (applicationName) {
+        return res.status(201).json({
+          status: "success",
+          message: "Added copyright message Successfully",
+        });
+      }
+    } else {
+      const updateApp = await Config.updateOne({
+
+        copyrightMessage:
+          copyright
+
+
+      }
+      );
+
+      if (updateApp) {
+        return res.status(200).json({
+          status: "success",
+          message: "Updated copyright message Successfully",
+        });
+      }
+    }
+  } catch (error) {
+    console.log(error);
+  }
+};
 // Add Social Media
 
 const addSocialMedia = async (req, res) => {

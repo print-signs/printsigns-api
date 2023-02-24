@@ -13,7 +13,7 @@ const informationSchema = new mongoose.Schema(
         description: {
             type: String,
             maxLength: [500, "description cannot exceed 500 characters"],
-            required: [true, "Please Enter product description"],
+            required: [true, "Please Enter  description"],
         },
         user: {
             type: Schema.Types.ObjectId,

@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
 const configSchema = new Schema({
-  // gst: { type: Number },
+  appName: { type: String, default: "" },
+  copyrightMessage: { type: String, default: "" },
   // scrollText: { type: String },
   socialMedia: { type: Array, default: [] },
   address: { type: Array, default: [] },
