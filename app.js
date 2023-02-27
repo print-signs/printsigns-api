@@ -27,6 +27,7 @@ import orderRoute from './resources/Orders/orderRoute.js'
 import DepartureRouter from "./resources/Departure/DepartureRoute.js";
 import InformationRoute from "./resources/Informations/InformationRoute.js";
 import ComplaintRoute from "./resources/Complaints/ComplaintRoute.js";
+import ContactRequest from "./resources/ContactRequests/ContactRequestRoute.js"
 
 import StateRouter from "./resources/setting/state/state_routes.js";
 import CityRouter from "./resources/setting/city/city_routes.js";
@@ -41,6 +42,8 @@ app.use("/api", orderRoute);
 app.use("/api/departure/", DepartureRouter);
 //Information
 app.use("/api/information/", InformationRoute);
+//Contact Requests
+app.use("/api/contact/request/", ContactRequest);
 //Complaints
 app.use("/api/complaint/", ComplaintRoute);
 //state
