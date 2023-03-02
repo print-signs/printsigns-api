@@ -7,7 +7,6 @@ import cloudinary from "../../Utils/cloudinary.js";
 export const createProduct = async (req, res) => {
 
     try {
-        // console.log(req.body)
         if (!req.files) {
             return res.status(400).json({
 
@@ -15,30 +14,38 @@ export const createProduct = async (req, res) => {
 
             });
         }
-        const image_file = req.files.image;
+        let images = [];
+        let Allfiles = req.files.image;
+        if (typeof Allfiles.tempFilePath === "string") {
+            let filepath = Allfiles.tempFilePath;
+
+            images.push(filepath)
+        } else {
+            Allfiles.map(item => {
+                images.push(item.tempFilePath);
+            })
+        }
+
+        const imagesLinks = [];
+        for (let i = 0; i < images.length; i++) {
+            const result = await cloudinary.v2.uploader.upload(images[i], {
+                folder: "jatinMor/product",
+            });
+
+            imagesLinks.push({
+                public_id: result.public_id,
+                url: result.secure_url,
+            });
+        }
 
 
+        req.body.image = imagesLinks;
+        req.body.addedBy = req.user.id;
 
-        const myCloud = await cloudinary.v2.uploader.upload(
-            image_file?.tempFilePath,
-            {
-                folder: "ATP/Product_Image",
-            }
-        );
-        // const { name, base, description, date, time } = req.body;
-
-        const data = await Product.create({
-            ...req.body,
-
-            image: {
-                public_id: myCloud.public_id,
-                url: myCloud.secure_url,
-            },
-
-
-        });
+        const data = await Product.create({ ...req.body });
         res.status(201).json({
             success: true,
+            data,
             msg: " create Product Successfully!!",
 
         });
@@ -96,45 +103,57 @@ export const getOneProduct = async (req, res) => {
 // 3.update Product
 export const updateProduct = async (req, res) => {
     try {
-        const newProductData = {
-            name: req.body.name,
-            description: req.body.description,
-            base_Price: req.body.base_Price,
-            base_Price_With_Tax: req.body.base_Price_With_Tax,
-            price_Level_2: req.body.price_Level_2,
-            price_Level_2_With_Tax: req.body.price_Level_2_With_Tax,
-            price_Level_3: req.body.price_Level_3,
-            price_Level_3_With_Tax: req.body.price_Level_3_With_Tax,
+        // const newProductData = {
+        //     name: req.body.name,
+        //     description: req.body.description,
+        //     price: req.body.base_Price,
 
-
-
-        }
+        // }
 
         if (req.files) {
-            const image_file = req.files.image;
+
+
+            // req.body.addedBy = req.user.id;
+            // const image_file = req.files.image;
             const getProduct = await Product.findById(req.params.id);
+
+
             if (getProduct) {
-                const imageId = getProduct.image.public_id;
-                //delete image from claudinary
-                await cloudinary.uploader.destroy(imageId)
+                // Deleting Images From Cloudinary
+                for (let i = 0; i < getProduct.image.length; i++) {
+                    await cloudinary.v2.uploader.destroy(getProduct.image[i].public_id);
+                }
+            }
+            let images = [];
+            let Allfiles = req.files.image;
+            if (typeof Allfiles.tempFilePath === "string") {
+                let filepath = Allfiles.tempFilePath;
+
+                images.push(filepath)
+            } else {
+                Allfiles.map(item => {
+                    images.push(item.tempFilePath);
+                })
+            }
+
+            const imagesLinks = [];
+            for (let i = 0; i < images.length; i++) {
+                const result = await cloudinary.v2.uploader.upload(images[i], {
+                    folder: "jatinMor/product",
+                });
+
+                imagesLinks.push({
+                    public_id: result.public_id,
+                    url: result.secure_url,
+                });
             }
 
 
-            const myCloud = await cloudinary.v2.uploader.upload(
-                image_file?.tempFilePath,
-                {
-                    folder: "ATP/Product_Image",
-                }
-            );
-            // console.log(myCloud)
-            newProductData.image = {
-                public_id: myCloud.public_id,
-                url: myCloud.secure_url,
-            };
+            req.body.image = imagesLinks;
         }
-        // console.log(newCategoryData)
-        //req.user.id, 
-        const ModifyProduct = await Product.findByIdAndUpdate(req.params.id, newProductData,
+
+
+        const ModifyProduct = await Product.findByIdAndUpdate(req.params.id, req.body,
 
             { new: true }
             // runValidators: true,
@@ -161,9 +180,14 @@ export const updateProduct = async (req, res) => {
 export const deleteProduct = async (req, res) => {
 
     try {
-        //delete image from cloudinary
+
+        if (!req.params.id) {
+            return res.status(400).json({
+                success: false,
+                msg: "Please Provide Product ID!"
+            });
+        }
         const getProduct = await Product.findById(req.params.id);
-        // console.log(categ)
         if (!getProduct) {
             return res.status(404).json({
                 success: false,
@@ -171,8 +195,11 @@ export const deleteProduct = async (req, res) => {
             });
 
         }
-        const imageId = getProduct.image.public_id;
-        await cloudinary.uploader.destroy(imageId)
+        // Deleting Images From Cloudinary
+        for (let i = 0; i < getProduct.image.length; i++) {
+            await cloudinary.v2.uploader.destroy(getProduct.image[i].public_id);
+        }
+
 
         //-------------------------//
         const product = await Product.findByIdAndDelete(req.params.id)

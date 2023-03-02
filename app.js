@@ -1,6 +1,6 @@
 
 import dotenv from "dotenv";
-import express from 'express';
+import express from 'express'
 const app = express();
 import bodyParser from "body-parser";
 import fileUpload from "express-fileupload"// important pkg for file upload
@@ -23,10 +23,10 @@ app.use(fileUpload({
 //auth
 import user from "./resources/user/userRoute.js"
 import ProductRouter from "./resources/Products/ProductRoute.js";
-import orderRoute from './resources/Orders/orderRoute.js'
+import orderRoute from './resources/Orders/orderRoute.js';
 import DepartureRouter from "./resources/Departure/DepartureRoute.js";
 import InformationRoute from "./resources/Informations/InformationRoute.js";
-import ComplaintRoute from "./resources/Complaints/ComplaintRoute.js";
+import Testimonial from "./resources/Testimonials/TestimonialRoute.js";
 import ContactRequest from "./resources/ContactRequests/ContactRequestRoute.js"
 
 import StateRouter from "./resources/setting/state/state_routes.js";
@@ -45,7 +45,7 @@ app.use("/api/information/", InformationRoute);
 //Contact Requests
 app.use("/api/contact/request/", ContactRequest);
 //Complaints
-app.use("/api/complaint/", ComplaintRoute);
+app.use("/api/testimonial/", Testimonial);
 //state
 app.use("/api/state", StateRouter);
 //city

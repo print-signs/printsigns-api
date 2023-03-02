@@ -2,11 +2,11 @@
 import dotenv from 'dotenv'
 dotenv.config()
 import app from "./app.js"
-import connectDatabase from "./database/db.js";
+import connectDatabase from "./database/db.js"
 import cloudinary from "cloudinary"
 
 // Connecting to database
-connectDatabase();
+connectDatabase()
 
 //console.log(process.env.CLOUDINARY_API_KEY)
 //cloudenary uses

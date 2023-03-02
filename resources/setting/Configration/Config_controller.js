@@ -286,14 +286,14 @@ const addLogo = async (req, res) => {
 
       const result = await cloudinary.v2.uploader.upload(
         req.files.Headerlogo.tempFilePath,
-        { folder: "ATP/Logo" }
+        { folder: "Jatin/Logo" }
       );
       result1 = result.secure_url;
     }
     if (req.files.Footerlogo) {
       const result = await cloudinary.v2.uploader.upload(
         req.files.Footerlogo.tempFilePath,
-        { folder: "ATP/Logo" }
+        { folder: "Jatin/Logo" }
       );
       result2 = result.secure_url;
     }
@@ -301,7 +301,7 @@ const addLogo = async (req, res) => {
       // console.log(req.files.Adminlogo.path)
       const result = await cloudinary.v2.uploader.upload(
         req.files.Adminlogo.tempFilePath,
-        { folder: "ATP/Logo" }
+        { folder: "Jatin/Logo" }
       );
       result3 = result.secure_url;
     }
