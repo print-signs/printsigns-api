@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
-const CitySchema = new Schema(
+const LanguageSchema = new Schema(
   {
     // _id: { type: Schema.Types.ObjectId },
-    city_name: { type: String, default: "" },
-    state: { type: Schema.Types.ObjectId, ref: "State" },
+    language: { type: String, default: "" },
+    // state: { type: Schema.Types.ObjectId, ref: "State" },
     // createdAt: { type: Date, default: new Date() },
   },
   // { timestamps: { createdAt: false, updatedAt: true } }
@@ -13,4 +13,4 @@ const CitySchema = new Schema(
 
 );
 
-export const City = model("City", CitySchema);
+export const Language = model("Language", LanguageSchema);

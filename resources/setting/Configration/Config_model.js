@@ -10,6 +10,9 @@ const configSchema = new Schema({
   address: { type: Array, default: [] },
   logo: { type: Array, default: [] },
   terms_of_use: { type: String, default: "" },
+  purpose: { type: String, default: "" },
+  businessType: { type: String, default: "" },
+  language: { type: String, default: "" },
 });
 
 export const Config = model("Config", configSchema);

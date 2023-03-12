@@ -2,7 +2,6 @@ import { Config } from "./Config_model.js";
 import cloudinary from "../../../Utils/cloudinary.js";
 
 //Add app Name
-// Add Social Media
 
 export const addApplicationName = async (req, res) => {
 
@@ -52,7 +51,7 @@ export const addApplicationName = async (req, res) => {
   }
 };
 
-//
+//add copyright msg
 export const addCopyRightMessage = async (req, res) => {
 
 
@@ -100,8 +99,10 @@ export const addCopyRightMessage = async (req, res) => {
     console.log(error);
   }
 };
+//add business name
+//add purpose
+//add language
 // Add Social Media
-
 const addSocialMedia = async (req, res) => {
   const { facebook, twitter, instagram, linkedin, mail, youtube, pinterest } =
     req.body;
@@ -286,14 +287,14 @@ const addLogo = async (req, res) => {
 
       const result = await cloudinary.v2.uploader.upload(
         req.files.Headerlogo.tempFilePath,
-        { folder: "Jatin/Logo" }
+        { folder: "bolo/Logo" }
       );
       result1 = result.secure_url;
     }
     if (req.files.Footerlogo) {
       const result = await cloudinary.v2.uploader.upload(
         req.files.Footerlogo.tempFilePath,
-        { folder: "Jatin/Logo" }
+        { folder: "bolo/Logo" }
       );
       result2 = result.secure_url;
     }
@@ -301,7 +302,7 @@ const addLogo = async (req, res) => {
       // console.log(req.files.Adminlogo.path)
       const result = await cloudinary.v2.uploader.upload(
         req.files.Adminlogo.tempFilePath,
-        { folder: "Jatin/Logo" }
+        { folder: "bolo/Logo" }
       );
       result3 = result.secure_url;
     }

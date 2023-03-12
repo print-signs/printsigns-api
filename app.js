@@ -23,6 +23,9 @@ app.use(fileUpload({
 //auth
 import user from "./resources/user/userRoute.js"
 import ProductRouter from "./resources/Products/ProductRoute.js";
+//Businesses
+import BusinessRoute from "./resources/Businesses/BusinessRoute.js";
+
 import orderRoute from './resources/Orders/orderRoute.js';
 import DepartureRouter from "./resources/Departure/DepartureRoute.js";
 import InformationRoute from "./resources/Informations/InformationRoute.js";
@@ -30,12 +33,22 @@ import Testimonial from "./resources/Testimonials/TestimonialRoute.js";
 import ContactRequest from "./resources/ContactRequests/ContactRequestRoute.js"
 
 import StateRouter from "./resources/setting/state/state_routes.js";
-import CityRouter from "./resources/setting/city/city_routes.js";
+//
+import LanguageRoute from "./resources/setting/Language/language_routes.js";
+//purpose
+import PurposeRoute from "./resources/setting/Purpose/Purpose_routes.js";
+//business_Type
+import Business_TypeRoute from "./resources/setting/Business_Type/Business_routes.js";
+
 import ConfigRouter from "./resources/setting/Configration/Config_routes.js";
+
 import TaxRouter from "./resources/Tax/tax_routes.js";
 app.use("/api/v1/", user);
+
 //Product
 app.use("/api", ProductRouter);
+//businesses
+app.use("/api/businesses", BusinessRoute);
 //Order
 app.use("/api", orderRoute);
 //Departure
@@ -48,8 +61,12 @@ app.use("/api/contact/request/", ContactRequest);
 app.use("/api/testimonial/", Testimonial);
 //state
 app.use("/api/state", StateRouter);
-//city
-app.use("/api/city", CityRouter);
+//language
+app.use("/api/language", LanguageRoute);
+//Purpose
+app.use("/api/purpose", PurposeRoute);
+//Business_Type
+app.use("/api/business", Business_TypeRoute);
 //Tax
 app.use("/api/tax", TaxRouter);
 //config
