@@ -11,3 +11,4 @@ router.route("/get/:id").get(isAuthenticatedUser, getSingleBusiness);
 router.route("/getall").get(isAuthenticatedUser, getAllBusiness);
 
 export default router;
+
