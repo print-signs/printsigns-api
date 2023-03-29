@@ -2,6 +2,7 @@ import sendEmail from "../../Utils/sendEmail.js";
 import cloudinary from "../../Utils/cloudinary.js";
 import { Business } from "./BusinessModel.js";
 import password from "secure-random-password";
+import bcrypt from "bcryptjs";
 
 import fs from "fs";
 import catchAsyncErrors from "../../middlewares/catchAsyncErrors.js";
@@ -210,16 +211,67 @@ export const updateBusiness = async (req, res) => {
     if (!req?.user) return res.status(400).json({ message: "please login !" });
     if (!req?.params.id)
       return res.status(400).json({ message: "please Provide Business ID !" });
+    const BusinessWithURL = await Business.findOne({
+      short_url: req.body?.short_url,
+    });
+    if (
+      BusinessWithURL?._id &&
+      BusinessWithURL?._id?.toString() !== req.params.id
+    ) {
+      if (req?.files?.image?.tempFilePath)
+        fs.unlinkSync(image_file?.tempFilePath);
+      return res
+        .status(400)
+        .json({ message: "Business URL is not available!" });
+    }
+    const getBusiness = await Business.findById(req.params.id);
 
-    req.body.added_by = req.user._id;
-    const businesses = await Business.findByIdAndUpdate(req.params.id, {
-      ...req.body,
+    if (req?.files?.image?.tempFilePath) {
+      if (getBusiness?.banner) {
+        const imageId = getBusiness?.banner?.public_id;
+
+        await cloudinary.uploader.destroy(imageId);
+      }
+      const result = await cloudinary.v2.uploader.upload(
+        image_file?.tempFilePath,
+        {
+          folder: "Bolo/business_Image",
+        }
+      );
+      const image = { url: result?.secure_url, public_id: result?.public_id };
+      req.body.banner = image;
+      fs.unlinkSync(image_file?.tempFilePath);
+      await cloudinary.v2.uploader.destroy(getBusiness.banner.public_id);
+    }
+    //generate password
+    const passwords = password.randomPassword({
+      length: 10,
+      characters: [
+        { characters: password.upper, exactly: 1 },
+        { characters: password.symbols, exactly: 1 },
+        password.lower,
+        password.digits,
+      ],
     });
 
-    res.status(201).send({
+    req.body.password = await bcrypt.hash(passwords, 12);
+
+    req.body.added_by = req.user._id;
+    const business = await Business.findByIdAndUpdate(req.params.id, {
+      ...req.body,
+    });
+    await sendEmail({
+      to: `${req.body.email}`, // Change to your recipient
+
+      from: `${process.env.SEND_EMAIL_FROM}`, // Change to your verified sender
+
+      subject: `ATP Business Updated`,
+      html: `your  business Url is:${req.body.url}<br/><br/>your login email  is: <strong> ${req.body.email}</strong><br/>and  password is: <strong> ${passwords}</strong><br/><br/><h3>Thank You</h3>`,
+    });
+    return res.status(200).json({
       success: true,
-      message: "Business Updated Successfully",
-      businesses,
+      data: business,
+      message: `Business Updated successfully and Email sent to ${req.body.email} successfully`,
     });
   } catch (error) {
     console.log(error);
@@ -230,6 +282,7 @@ export const updateBusiness = async (req, res) => {
     });
   }
 };
+
 //delete
 export const deleteBusinessById = async (req, res) => {
   try {
@@ -253,27 +306,34 @@ export const deleteBusinessById = async (req, res) => {
 
 // update password for business owner with old password
 export const updatePassword = catchAsyncErrors(async (req, res, next) => {
-  const business = await Business.findById(req.business._id).select(
-    "+password"
-  );
+  try {
+    const business = await Business.findById(req.business._id).select(
+      "+password"
+    );
 
-  const isPasswordMatched = await business.comparePassword(
-    req.body.oldPassword
-  );
+    const isPasswordMatched = await business.comparePassword(
+      req.body.oldPassword
+    );
 
-  if (!isPasswordMatched) {
-    return next(new ErrorHander("Old password is incorrect", 400));
+    if (!isPasswordMatched) {
+      //return next(new ErrorHander("old password is incorrect", 400));
+      return res.status(400).send("Please enter correct old password");
+    }
+
+    if (req.body.newPassword !== req.body.confirmPassword) {
+      //return next(new ErrorHander("password does not match", 400));
+      return res.status(400).send("password does not match");
+    }
+
+    business.password = req.body.newPassword;
+
+    await business.save();
+
+    sendToken(business, 200, res);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error.message);
   }
-
-  if (req.body.newPassword !== req.body.confirmPassword) {
-    return next(new ErrorHander("password does not match", 400));
-  }
-
-  business.password = req.body.newPassword;
-
-  await business.save();
-
-  sendToken(business, 200, res);
 });
 
 // login for business owner
