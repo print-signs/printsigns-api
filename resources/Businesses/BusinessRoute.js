@@ -13,6 +13,7 @@ import {
   updatePassword,
   getSelfBusiness,
   loginBusiness,
+  forgotPassword,
 } from "./BusinessController.js";
 
 const router = Router();
@@ -33,6 +34,10 @@ router.route("/getselfbusiness").get(isBusinessAuthenticated, getSelfBusiness);
 
 //auth routes
 router.route("/login").post(loginBusiness);
-router.route("/password/update").patch(isAuthenticatedUser, updatePassword);
+router.route("/password/update").patch(isBusinessAuthenticated, updatePassword);
+
+router.route("/password/forgot").post(forgotPassword);
+
+//outer.route("/password/reset/:token").put(resetPassword);
 
 export default router;

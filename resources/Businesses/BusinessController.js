@@ -6,6 +6,7 @@ import password from "secure-random-password";
 import fs from "fs";
 import catchAsyncErrors from "../../middlewares/catchAsyncErrors.js";
 import sendToken from "../../Utils/jwtToken.js";
+import ErrorHander from "../../Utils/errorhander.js";
 
 export const createBusiness = async (req, res) => {
   try {
@@ -252,7 +253,9 @@ export const deleteBusinessById = async (req, res) => {
 
 // update password for business owner with old password
 export const updatePassword = catchAsyncErrors(async (req, res, next) => {
-  const business = await Business.findById(req.user.id).select("+password");
+  const business = await Business.findById(req.business._id).select(
+    "+password"
+  );
 
   const isPasswordMatched = await business.comparePassword(
     req.body.oldPassword
@@ -297,6 +300,58 @@ export const loginBusiness = async (req, res, next) => {
 
     sendToken(business, 200, res);
   } catch (error) {
+    return res
+      .status(500)
+      .json({ message: "Something went wrong!", error: error?.message || "" });
+  }
+};
+
+// forgot password for business
+export const forgotPassword = async (req, res, next) => {
+  const business = await Business.findOne({ email: req.body.email });
+
+  if (!business) {
+    return res.status(404).json({ message: "business not found" });
+  }
+  // Get ResetPassword Token
+  //const resetToken = business.getResetPasswordToken(); //call function
+
+  //save database reset token
+  await business.save({ validateBeforeSave: false });
+
+  const passwords = password.randomPassword({
+    length: 12,
+    characters: [
+      { characters: password.upper, exactly: 1 },
+      { characters: password.symbols, exactly: 1 },
+      password.lower,
+      password.digits,
+    ],
+  });
+
+  business.password = passwords;
+  await business.save();
+  // const message = `Your password reset token are :- \n\n ${resetPasswordUrl} \n\nyour new password is:${password}\n\nIf you have not requested this email then, please ignore it.`;
+  try {
+    await sendEmail({
+      to: `${business.email}`, // Change to your recipient
+
+      from: `${process.env.SEND_EMAIL_FROM}`, // Change to your verified sender
+
+      subject: `Bolo Ai Password Recovery`,
+      html: `your new password is: <br/> <strong> ${passwords}</strong><br/><br/>If you have not requested this email then, please ignore it.`,
+    });
+
+    res.status(200).json({
+      success: true,
+      message: `Email sent to ${business.email} successfully`,
+    });
+  } catch (error) {
+    business.resetPasswordToken = undefined;
+    business.resetPasswordExpire = undefined;
+
+    await business.save({ validateBeforeSave: false });
+
     return res
       .status(500)
       .json({ message: "Something went wrong!", error: error?.message || "" });
