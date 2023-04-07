@@ -46,19 +46,15 @@ const specialistSchema = new mongoose.Schema({
     trim: true,
     maxlength: [100, "Specialty name cannot exceed 100 characters"],
   },
-  location: {
+  perPatientTime: {
     type: String,
-    trim: true,
-    maxlength: [100, "Location cannot exceed 100 characters"],
+    required: [true, "Please enter per Patient Time"],
   },
+
   daysAvailable: {
     type: [daysAvailableSchema],
   },
-  phone: {
-    type: String,
-    trim: true,
-    maxlength: [100, "Phone number cannot exceed 100 characters"],
-  },
+
   createdAt: {
     type: Date,
     default: Date.now,

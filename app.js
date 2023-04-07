@@ -47,6 +47,8 @@ import TaxRouter from "./resources/Tax/tax_routes.js";
 import SpecialtiesRouter from "./resources/Specialties/SpecialtiesRoute.js";
 //specialist
 import SpecialistRouter from "./resources/Specialist/SpecialistRoute.js";
+//appointments
+import AppointmentRouter from "./resources/Appointments/AppointmentRoute.js";
 
 app.use("/api/v1/", user);
 
@@ -80,5 +82,7 @@ app.use("/api/config", ConfigRouter);
 app.use("/api/config/specialty", SpecialtiesRouter);
 //specialties
 app.use("/api/specialist", SpecialistRouter);
+//appointments
+app.use("/api/appointment", AppointmentRouter);
 
 export default app;
