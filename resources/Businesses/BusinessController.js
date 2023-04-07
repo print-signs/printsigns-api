@@ -157,6 +157,17 @@ export const getAllBusiness = async (req, res) => {
     });
   }
 };
+
+//6.Get User Detail
+export const getBusinessDetails = catchAsyncErrors(async (req, res, next) => {
+  const user = await Business.findById(req.business.id);
+
+  res.status(200).json({
+    success: true,
+    user,
+  });
+});
+
 export const getSingleBusiness = async (req, res) => {
   try {
     if (!req?.user) return res.status(400).json({ message: "please login !" });

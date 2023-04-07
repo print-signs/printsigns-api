@@ -14,10 +14,12 @@ import {
   getSelfBusiness,
   loginBusiness,
   forgotPassword,
+  getBusinessDetails,
 } from "./BusinessController.js";
 
 const router = Router();
 
+router.route("/details").get(isBusinessAuthenticated, getBusinessDetails);
 router
   .route("/add")
   .post(isAuthenticatedUser, authorizeRoles("admin"), createBusiness);
