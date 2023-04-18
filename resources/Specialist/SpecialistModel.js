@@ -34,6 +34,12 @@ const daysAvailableSchema = new mongoose.Schema({
 });
 
 const specialistSchema = new mongoose.Schema({
+  HealthCareProviderID: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Businesses",
+    required: true,
+  },
+
   specialistName: {
     type: String,
     required: [true, "Please enter specialist name"],

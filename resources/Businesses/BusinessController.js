@@ -15,7 +15,7 @@ export const createBusiness = async (req, res) => {
 
     const {
       business,
-      purpose,
+      specialization,
       country,
       language,
       state,
@@ -34,8 +34,6 @@ export const createBusiness = async (req, res) => {
     switch (true) {
       case !business:
         return res.status(500).send({ error: "Business is Required" });
-      case !purpose:
-        return res.status(500).send({ error: "Purpose is Required" });
       case !language:
         return res.status(500).send({ error: "Language is Required" });
       case !address_Line_1:
@@ -50,21 +48,21 @@ export const createBusiness = async (req, res) => {
         return res.status(500).send({ error: "city is Required" });
       case !country:
         return res.status(500).send({ error: "country is Required" });
-      case !business_name:
-        return res.status(500).send({ error: "business_name is Required" });
       case !email:
         return res.status(500).send({ error: "email is Required" });
       case !contact_Number:
         return res.status(500).send({ error: "contact_Number is Required" });
-      case !contact_Person_Name:
-        return res
-          .status(500)
-          .send({ error: "contact_Person_Name is Required" });
-      case !url:
-        return res.status(500).send({ error: " Business url is Required" });
       case !short_url:
         return res.status(500).send({ error: "short_url is Required" });
     }
+
+    // create unique url from short url and unique slug and add it to req.body
+    const slug = await Business.find({ short_url: req.body?.short_url });
+    const uniqueSlug =
+      slug.length > 0
+        ? `${req.body?.short_url}-${slug.length}`
+        : req.body?.short_url;
+    req.body.url = `${url}${uniqueSlug}`;
 
     let businesse = await Business.findOne({ email });
     if (businesse) {
@@ -76,13 +74,7 @@ export const createBusiness = async (req, res) => {
     const businessWithURL = await Business.findOne({
       short_url: req.body?.short_url,
     });
-    if (businessWithURL?._id) {
-      if (req?.files?.image?.tempFilePath)
-        fs.unlinkSync(image_file?.tempFilePath);
-      return res
-        .status(400)
-        .json({ message: "business URL is not available!" });
-    }
+
     if (req?.files?.image?.tempFilePath) {
       const result = await cloudinary.v2.uploader.upload(
         image_file?.tempFilePath,

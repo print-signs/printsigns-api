@@ -7,7 +7,14 @@ const { Types } = pkg;
 export const createAppointment = async (req, res, next) => {
   try {
     const doctorId = Types.ObjectId(req.body.doctorId);
-    const { doctorName, date, time, patientName, patientPhone } = req.body;
+    const {
+      doctorName,
+      date,
+      time,
+      patientName,
+      patientPhone,
+      HealthCareProviderID,
+    } = req.body;
     const appointment = await Appointment.create({
       doctorId,
       doctorName,
@@ -15,6 +22,7 @@ export const createAppointment = async (req, res, next) => {
       time,
       patientName,
       patientPhone,
+      HealthCareProviderID,
     });
     res.status(201).json({
       success: true,

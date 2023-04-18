@@ -12,6 +12,12 @@ import { Specialist } from "./../Specialist/SpecialistModel.js";
 // }
 
 const appointmentSchema = new mongoose.Schema({
+  HealthCareProviderID: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Businesses",
+    required: true,
+  },
+
   doctorId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: Specialist,
