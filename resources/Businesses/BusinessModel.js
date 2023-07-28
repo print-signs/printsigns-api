@@ -3,6 +3,9 @@ import validator from "validator";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import { ShortUrl } from "./Short_Urls/ShortUrlModel.js";
+import { Appointment } from "../Appointments/AppointmentModel.js";
+import { Specialist } from "../Specialist/SpecialistModel.js";
 const { Schema, model } = mongoose;
 
 const BusinessSchema = new Schema(
@@ -52,6 +55,26 @@ const BusinessSchema = new Schema(
   },
   { timestamps: true }
 );
+
+BusinessSchema.pre("remove", async function (next) {
+  try {
+    // Delete all the short urls associated with the healthcare provider
+    await ShortUrl.deleteMany({ HealthCareProviderID: this._id });
+
+    // Delete all the appointments associated with the healthcare provider
+    await Appointment.deleteMany({
+      HealthCareProviderID: this._id,
+    });
+
+    // Delete all the specialist associated with the healthcare provider
+    await Specialist.deleteMany({
+      HealthCareProviderID: this._id,
+    });
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
 
 BusinessSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {

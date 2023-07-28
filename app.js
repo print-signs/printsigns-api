@@ -49,6 +49,8 @@ import SpecialtiesRouter from "./resources/Specialties/SpecialtiesRoute.js";
 import SpecialistRouter from "./resources/Specialist/SpecialistRoute.js";
 //appointments
 import AppointmentRouter from "./resources/Appointments/AppointmentRoute.js";
+//short urls
+import ShortUrlRouter from "./resources/Businesses/Short_Urls/ShortUrlRoute.js";
 
 app.use("/api/v1/", user);
 
@@ -84,5 +86,7 @@ app.use("/api/config/specialty", SpecialtiesRouter);
 app.use("/api/specialist", SpecialistRouter);
 //appointments
 app.use("/api/appointment", AppointmentRouter);
+//short urls
+app.use("/api/shorturl", ShortUrlRouter);
 
 export default app;

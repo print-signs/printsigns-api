@@ -1,6 +1,7 @@
 import sendEmail from "../../Utils/sendEmail.js";
 import cloudinary from "../../Utils/cloudinary.js";
 import { Business } from "./BusinessModel.js";
+import { ShortUrl } from "./Short_Urls/ShortUrlModel.js";
 import password from "secure-random-password";
 import bcrypt from "bcryptjs";
 
@@ -62,6 +63,7 @@ export const createBusiness = async (req, res) => {
       slug.length > 0
         ? `${req.body?.short_url}-${slug.length}`
         : req.body?.short_url;
+    req.body.short_url = uniqueSlug;
     req.body.url = `${url}${uniqueSlug}`;
 
     let businesse = await Business.findOne({ email });
@@ -102,6 +104,10 @@ export const createBusiness = async (req, res) => {
 
     req.body.added_by = req.user._id;
     const businesses = await Business.create(req.body);
+    const shortUrls = await ShortUrl.create({
+      shortUrl: req.body?.short_url,
+      HealthCareProviderID: businesses._id,
+    });
     await sendEmail({
       to: `${req.body.email}`, // Change to your recipient
 
@@ -162,7 +168,6 @@ export const getBusinessDetails = catchAsyncErrors(async (req, res, next) => {
 
 export const getSingleBusiness = async (req, res) => {
   try {
-    if (!req?.user) return res.status(400).json({ message: "please login !" });
     if (!req?.params.id)
       return res.status(400).json({ message: "please Provide Business ID !" });
 
@@ -293,13 +298,13 @@ export const deleteBusinessById = async (req, res) => {
     if (!req?.params.id)
       return res.status(400).json({ message: "please Provide Business ID !" });
 
-    const business = await Business.findByIdAndDelete(req.params.id);
+    const business = await Business.findById(req.params.id);
     if (!business) {
       return res.status(400).json({ message: "business Not Found" });
     }
     await business.remove();
 
-    res.status(200).json({ status: "OK", msg: "Deteted successfully" });
+    res.status(200).json({ status: "OK", msg: "Deleted successfully" });
   } catch (err) {
     return res
       .status(500)
