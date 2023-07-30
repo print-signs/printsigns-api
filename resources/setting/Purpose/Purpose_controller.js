@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Purpose } from "./purpose_model.js";
+import { Purpose } from "./Purpose_model.js";
 import {
   addEntity,
   deleteEntity,

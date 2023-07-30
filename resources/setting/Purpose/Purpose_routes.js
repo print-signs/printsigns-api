@@ -8,7 +8,7 @@ import {
   updatePurpose,
   deletePurposeById,
   // getPurposeByIdWithState,
-} from "./purpose_controller.js";
+} from "./Purpose_controller.js";
 
 router.get("/newid", getNewId);
 router.get("/", getAllPurposes);
