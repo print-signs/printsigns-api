@@ -8,7 +8,7 @@ import {
   updateBusiness_Type,
   deleteBusiness_TypeById,
   getBusiness_TypeByIdWithState,
-} from "./business_controller.js";
+} from "./Business_controller.js";
 
 router.get("/newid", getNewId);
 router.get("/", getAllBusiness_Types);
