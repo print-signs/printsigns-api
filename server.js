@@ -15,7 +15,7 @@ cloudinary.config({
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
-//<---------deployement------------->
+//<---------deployement------------->``
 // const data_dir = path.resolve();
 
 // if (process.env.NODE_ENV === "production") {

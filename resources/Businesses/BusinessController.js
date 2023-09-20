@@ -10,12 +10,15 @@ import catchAsyncErrors from "../../middlewares/catchAsyncErrors.js";
 import sendToken from "../../Utils/jwtToken.js";
 import ErrorHander from "../../Utils/errorhander.js";
 
+
+
+
 export const createBusiness = async (req, res) => {
   try {
     if (!req?.user) return res.status(400).json({ message: "please login !" });
 
     const {
-      business,
+      userType,
       specialization,
       country,
       language,
@@ -24,7 +27,7 @@ export const createBusiness = async (req, res) => {
       address_Line_1,
       address_Line_2,
       pincode,
-      business_name,
+      userName,
       email,
       contact_Number,
       contact_Person_Name,
@@ -33,10 +36,10 @@ export const createBusiness = async (req, res) => {
     } = req.body;
     //validation
     switch (true) {
-      case !business:
+      case !userType:
         return res.status(500).send({ error: "Business is Required" });
-      case !language:
-        return res.status(500).send({ error: "Language is Required" });
+      // case !language:
+      //   return res.status(500).send({ error: "Language is Required" });
       case !address_Line_1:
         return res.status(500).send({ error: "address_Line_1 is Required" });
       case !address_Line_2:
@@ -133,6 +136,22 @@ export const createBusiness = async (req, res) => {
     });
   }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 export const getAllBusiness = async (req, res) => {
   try {

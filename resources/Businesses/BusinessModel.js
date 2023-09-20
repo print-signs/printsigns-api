@@ -10,16 +10,17 @@ const { Schema, model } = mongoose;
 
 const BusinessSchema = new Schema(
   {
-    business: { type: String, required: true },
+    userType: { type: String, required: true },
 
     specialization: {
       type: String,
     },
 
-    language: [{ type: Array, default: [], required: true }],
+    language: [{ type: Array, default: [] }],
     //contacts
-    business_name: {
+    userName: {
       type: String,
+      required:true
     },
     email: {
       type: String,
@@ -32,7 +33,7 @@ const BusinessSchema = new Schema(
     },
 
     contact_Number: { type: Number, required: true },
-    contact_Person_Name: { type: String, required: true },
+    contact_Person_Name: { type: String},
 
     url: { type: String, default: "" },
     short_url: { type: String, default: "" },
@@ -50,7 +51,7 @@ const BusinessSchema = new Schema(
     added_by: {
       type: mongoose.Schema.ObjectId,
       ref: "User",
-      required: true,
+      
     },
   },
   { timestamps: true }
