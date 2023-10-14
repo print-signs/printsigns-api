@@ -37,6 +37,8 @@ import StateRouter from "./resources/setting/state/state_routes.js";
 import LanguageRoute from "./resources/setting/Language/language_routes.js";
 //purpose
 import PurposeRoute from "./resources/setting/Purpose/Purpose_routes.js";
+// category Route
+import categoryRoute from "./resources/Category/categoryRoutes.js";
 //business_Type
 import Business_TypeRoute from "./resources/setting/Business_Type/Business_routes.js";
 
@@ -58,6 +60,8 @@ app.use("/api/v1/", user);
 app.use("/api", ProductRouter);
 //businesses
 app.use("/api/businesses", BusinessRoute);
+// Category
+app.use("/api/category", categoryRoute);
 //Order
 app.use("/api", orderRoute);
 //Departure
