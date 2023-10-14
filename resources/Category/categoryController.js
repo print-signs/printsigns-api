@@ -6,7 +6,7 @@ export const addCategory = async (req, res) => {
   const { categoryName } = req.body;
   if (!req?.user) return res.status(400).json({ message: "please login !" });
   try {
-    if (!mongoose.Types.ObjectId.isValid(addedBy)) {
+    if (!mongoose.Types.ObjectId.isValid(req.user._id)) {
       return res.status(400).json({ message: "please login again " });
     }
     const category = await CategoryModel.create({
