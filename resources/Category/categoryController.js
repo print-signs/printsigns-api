@@ -47,3 +47,60 @@ export const getCategories = async (req, res) => {
     });
   }
 };
+
+export const updateCategory = async (req, res) => {
+  try {
+    if (!req?.user) return res.status(400).json({ message: "please login !" });
+    const { _id } = req.params;
+    console.log(_id);
+    const { categoryName } = req.body;
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      return res.status(404).json({ error: "Can not find the document " });
+    }
+
+    // Use findOneAndUpdate to update the document
+    const update = await CategoryModel.findOneAndUpdate(
+      { _id: _id },
+      { categoryName: categoryName }, // Provide the updated categoryName
+      { new: true } // To return the updated document
+    );
+
+    if (!update) {
+      return res
+        .status(404)
+        .json({ message: "Can not update document, something went wrong" });
+    }
+
+    res.status(200).json({ success: true, update });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message ? error.message : "Something went wrong",
+    });
+  }
+};
+
+export const deleteCategory = async (req, res) => {
+  try {
+    if (!req?.user) return res.status(400).json({ message: "please login !" });
+    const { _id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(_id)) {
+      return res.status(404).json({ error: "Can not find the document " });
+    }
+
+    const deleteCategory = await CategoryModel.findOneAndDelete({ _id: _id });
+    if (!deleteCategory) {
+      return res
+        .status(404)
+        .json({
+          error: "Can not find the document with the provided id to delete  ",
+        });
+    }
+    res.status(200).json({ success: true, deleteCategory });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message ? error.message : "Something went wrong",
+    });
+  }
+};
