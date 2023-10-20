@@ -52,7 +52,7 @@ export const updateCategory = async (req, res) => {
   try {
     if (!req?.user) return res.status(400).json({ message: "please login !" });
     const { _id } = req.params;
-    console.log(_id);
+
     const { categoryName } = req.body;
     if (!mongoose.Types.ObjectId.isValid(_id)) {
       return res.status(404).json({ error: "Can not find the document " });
@@ -90,11 +90,9 @@ export const deleteCategory = async (req, res) => {
 
     const deleteCategory = await CategoryModel.findOneAndDelete({ _id: _id });
     if (!deleteCategory) {
-      return res
-        .status(404)
-        .json({
-          error: "Can not find the document with the provided id to delete  ",
-        });
+      return res.status(404).json({
+        error: "Can not find the document with the provided id to delete  ",
+      });
     }
     res.status(200).json({ success: true, deleteCategory });
   } catch (error) {

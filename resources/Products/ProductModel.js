@@ -9,6 +9,10 @@ const productSchema = new Schema(
       required: [true, "Please Enter product Name"],
       trim: true,
     },
+    uniqueId: {
+      type: String,
+      required: true,
+    },
     description: {
       type: String,
       maxLength: [100, "description cannot exceed 100 characters"],
