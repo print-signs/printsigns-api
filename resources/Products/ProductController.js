@@ -34,7 +34,7 @@ export const createProduct = async (req, res) => {
     }
 
     req.body.image = imagesLinks;
-    req.body.addedBy = req.user.id;
+    req.body.addedBy = req.user._id;
     const newUniquid = uuidv4();
     req.body.uniqueId = newUniquid.replace(/-/g, "").substring(0, 10);
 
@@ -54,7 +54,9 @@ export const createProduct = async (req, res) => {
 //get All Product
 export const getAllProduct = async (req, res) => {
   try {
-    const product = await Product.find().sort({ createdAt: -1 });
+    const product = await Product.find({ addedBy: req.user._id }).sort({
+      createdAt: -1,
+    });
     if (product) {
       return res.status(200).json({
         success: true,
