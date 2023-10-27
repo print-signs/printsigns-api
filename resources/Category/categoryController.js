@@ -1,22 +1,36 @@
 import mongoose from "mongoose";
 import { CategoryModel } from "./CategoryModel.js";
+import cloudinary from "../../Utils/cloudinary.js";
 
 // Add new Category
 export const addCategory = async (req, res) => {
   const { categoryName } = req.body;
+  const { categoryImage } = req.files;
+  // console.log(categoryName, categoryImage);
+
   if (!req?.user) return res.status(400).json({ message: "please login !" });
   try {
     if (!mongoose.Types.ObjectId.isValid(req.user._id)) {
       return res.status(400).json({ message: "please login again " });
     }
-    const category = await CategoryModel.create({
-      categoryName,
-      addedBy: req.user._id,
-    });
-    if (category) {
-      res
-        .status(201)
-        .json({ success: true, category, message: "category Added" });
+    const result = await cloudinary.v2.uploader.upload(
+      categoryImage.tempFilePath,
+      {
+        folder: "jatinMor/category",
+      }
+    );
+
+    if (result) {
+      const category = await CategoryModel.create({
+        categoryName,
+        categoryImage: result,
+        addedBy: req.user._id,
+      });
+      if (category) {
+        return res
+          .status(201)
+          .json({ success: true, category, message: "category Added" });
+      }
     }
   } catch (error) {
     res.status(500).json({
@@ -52,26 +66,51 @@ export const updateCategory = async (req, res) => {
   try {
     if (!req?.user) return res.status(400).json({ message: "please login !" });
     const { _id } = req.params;
-
     const { categoryName } = req.body;
+    const olderImage = req.body?.olderImage;
+    const categoryImag = req.files?.categoryImage;
+
     if (!mongoose.Types.ObjectId.isValid(_id)) {
       return res.status(404).json({ error: "Can not find the document " });
     }
 
-    // Use findOneAndUpdate to update the document
-    const update = await CategoryModel.findOneAndUpdate(
-      { _id: _id },
-      { categoryName: categoryName }, // Provide the updated categoryName
-      { new: true } // To return the updated document
-    );
+    // find the document with the id to delete the image from cloudinary
+    if (JSON.parse(olderImage).length == 0) {
+      const deletefromCloudinary = await CategoryModel.findOne({ _id: _id });
 
-    if (!update) {
-      return res
-        .status(404)
-        .json({ message: "Can not update document, something went wrong" });
+      const deleteresponse = await cloudinary.v2.uploader.destroy(
+        deletefromCloudinary.categoryImage.public_id
+      );
+      if (deleteresponse) {
+        const result = await cloudinary.v2.uploader.upload(
+          categoryImag.tempFilePath,
+          {
+            folder: "jatinMor/category",
+          }
+        );
+        const update = await CategoryModel.findOneAndUpdate(
+          { _id: _id },
+          { categoryName: categoryName, categoryImage: result }, // Provide the updated categoryName
+          { new: true } // To return the updated document
+        );
+        if (!update) {
+          return res
+            .status(404)
+            .json({ message: "Can not update document, something went wrong" });
+        } else {
+          return res.status(200).json({ success: true, update });
+        }
+      }
+    } else {
+      const update = await CategoryModel.findOneAndUpdate(
+        { _id: _id },
+        { categoryName: categoryName, categoryImage: JSON.parse(olderImage) }, // Provide the updated categoryName
+        { new: true } // To return the updated document
+      );
+      if (update) {
+        return res.status(200).json({ success: true, update });
+      }
     }
-
-    res.status(200).json({ success: true, update });
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -88,13 +127,22 @@ export const deleteCategory = async (req, res) => {
       return res.status(404).json({ error: "Can not find the document " });
     }
 
-    const deleteCategory = await CategoryModel.findOneAndDelete({ _id: _id });
-    if (!deleteCategory) {
-      return res.status(404).json({
-        error: "Can not find the document with the provided id to delete  ",
-      });
+    const deletefromCloudinary = await CategoryModel.findOne({ _id: _id });
+
+    const deleteresponse = await cloudinary.v2.uploader.destroy(
+      deletefromCloudinary.categoryImage.public_id
+    );
+    if (deleteresponse) {
+      const deleteCategory = await CategoryModel.findOneAndDelete({ _id: _id });
+      if (!deleteCategory) {
+        return res.status(404).json({
+          error: "Can not find the document with the provided id to delete  ",
+        });
+      }
+      res.status(200).json({ success: true, deleteCategory });
+    } else {
+      return res.status(404).json({ error: "can not delete the category " });
     }
-    res.status(200).json({ success: true, deleteCategory });
   } catch (error) {
     res.status(500).json({
       success: false,

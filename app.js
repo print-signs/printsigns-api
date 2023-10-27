@@ -24,7 +24,7 @@ app.use(
 import user from "./resources/user/userRoute.js";
 import ProductRouter from "./resources/Products/ProductRoute.js";
 //Businesses
-import BusinessRoute from "./resources/Businesses/BusinessRoute.js";
+// import BusinessRoute from "./resources/Businesses/BusinessRoute.js";
 
 import orderRoute from "./resources/Orders/orderRoute.js";
 import DepartureRouter from "./resources/Departure/DepartureRoute.js";
@@ -40,31 +40,31 @@ import PurposeRoute from "./resources/setting/Purpose/Purpose_routes.js";
 // category Route
 import categoryRoute from "./resources/Category/categoryRoutes.js";
 import ContentRoute from "./resources/Content/ContentRoutes.js";
+import UserAddressRoute from "./resources/userAddress/useAddressRoute.js";
 //business_Type
-import Business_TypeRoute from "./resources/setting/Business_Type/Business_routes.js";
+// import Business_TypeRoute from "./resources/setting/Business_Type/Business_routes.js";
 
 import ConfigRouter from "./resources/setting/Configration/Config_routes.js";
 
 import TaxRouter from "./resources/Tax/tax_routes.js";
 //specialties
 import SpecialtiesRouter from "./resources/Specialties/SpecialtiesRoute.js";
-//specialist
-import SpecialistRouter from "./resources/Specialist/SpecialistRoute.js";
-//appointments
-import AppointmentRouter from "./resources/Appointments/AppointmentRoute.js";
+
 //short urls
-import ShortUrlRouter from "./resources/Businesses/Short_Urls/ShortUrlRoute.js";
+// import ShortUrlRouter from "./resources/Businesses/Short_Urls/ShortUrlRoute.js";
 
 app.use("/api/v1/", user);
 
 //Product
 app.use("/api", ProductRouter);
 //businesses
-app.use("/api/businesses", BusinessRoute);
+// app.use("/api/businesses", BusinessRoute);
 // Category
 app.use("/api/category", categoryRoute);
 // Content
 app.use("/api/content", ContentRoute);
+// User Address
+app.use("/api/user-address", UserAddressRoute);
 //Order
 app.use("/api", orderRoute);
 //Departure
@@ -82,18 +82,18 @@ app.use("/api/language", LanguageRoute);
 //Purpose
 app.use("/api/purpose", PurposeRoute);
 //Business_Type
-app.use("/api/business", Business_TypeRoute);
+// app.use("/api/business", Business_TypeRoute);
 //Tax
 app.use("/api/tax", TaxRouter);
 //config
 app.use("/api/config", ConfigRouter);
 //config specialty
-app.use("/api/config/specialty", SpecialtiesRouter);
+// app.use("/api/config/specialty", SpecialtiesRouter);
 //specialties
-app.use("/api/specialist", SpecialistRouter);
+// app.use("/api/specialist", SpecialistRouter);
 //appointments
-app.use("/api/appointment", AppointmentRouter);
+// app.use("/api/appointment", AppointmentRouter);
 //short urls
-app.use("/api/shorturl", ShortUrlRouter);
+// app.use("/api/shorturl", ShortUrlRouter);
 
 export default app;

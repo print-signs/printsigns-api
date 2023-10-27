@@ -1,9 +1,5 @@
 import { Router } from "express";
-import {
-  isAuthenticatedUser,
-  authorizeRoles,
-  isBusinessAuthenticated,
-} from "../../middlewares/auth.js";
+import { isAuthenticatedUser, authorizeRoles } from "../../middlewares/auth.js";
 import {
   createSpecialty,
   deleteSpecialty,

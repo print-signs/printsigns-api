@@ -2,7 +2,7 @@ import User from "../resources/user/userModel.js";
 import jwt from "jsonwebtoken";
 import ErrorHander from "../Utils/errorhander.js";
 import { Franchisee } from "../resources/Temple/FranchiseeModel.js";
-import { Business } from "../resources/Businesses/BusinessModel.js";
+// import { Business } from "../resources/Businesses/BusinessModel.js";
 
 export const isAuthenticatedUser = async (req, res, next) => {
   try {
@@ -74,40 +74,40 @@ export const isFranchiAuthenticated = async (req, res, next) => {
 
 // isBusinessAuthenticated
 
-export const isBusinessAuthenticated = async (req, res, next) => {
-  try {
-    if (!req.headers.authorization) {
-      return res.status(400).json({
-        success: false,
-        message: "Login to Access this resource",
-      });
-    }
-    const getToken = req.headers;
-    //remove Bearer from token
+// export const isBusinessAuthenticated = async (req, res, next) => {
+//   try {
+//     if (!req.headers.authorization) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "Login to Access this resource",
+//       });
+//     }
+//     const getToken = req.headers;
+//     //remove Bearer from token
 
-    const fronttoken = getToken.authorization.slice(7);
+//     const fronttoken = getToken.authorization.slice(7);
 
-    const frontdecoded = jwt.verify(fronttoken, process.env.JWT_SECRET);
+//     const frontdecoded = jwt.verify(fronttoken, process.env.JWT_SECRET);
 
-    if (!frontdecoded) {
-      return res.status(400).json({
-        success: false,
-        message: "incorrect token",
-      });
-    }
-    // console.log(frontdecoded)
-    const fuser = await Business.findById(frontdecoded.id);
+//     if (!frontdecoded) {
+//       return res.status(400).json({
+//         success: false,
+//         message: "incorrect token",
+//       });
+//     }
+//     // console.log(frontdecoded)
+//     const fuser = await Business.findById(frontdecoded.id);
 
-    req.business = fuser;
+//     req.business = fuser;
 
-    next();
-  } catch (error) {
-    return res.status(400).json({
-      success: false,
-      message: error.message,
-    });
-  }
-};
+//     next();
+//   } catch (error) {
+//     return res.status(400).json({
+//       success: false,
+//       message: error.message,
+//     });
+//   }
+// };
 
 export const authorizeRoles = (...roles) => {
   //pass admin
