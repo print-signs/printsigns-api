@@ -5,8 +5,10 @@ import { DesignModel } from "./designModel.js";
 
 // Add new Category
 export const addDesign = async (req, res) => {
-  const { designName } = req.body;
+  const { designName, categoryName } = req.body;
   const { designImage } = req.files;
+  const { designImageJson } = req.body;
+
   // console.log(categoryName, categoryImage);
 
   if (!req?.user) return res.status(400).json({ message: "please login !" });
@@ -24,7 +26,9 @@ export const addDesign = async (req, res) => {
     if (result) {
       const design = await DesignModel.create({
         designName,
+        categoryName,
         designImage: result,
+        designImageJson: JSON.parse(designImageJson),
         addedBy: req.user._id,
       });
       if (design) {
@@ -65,9 +69,10 @@ export const updateDesign = async (req, res) => {
   try {
     if (!req?.user) return res.status(400).json({ message: "please login !" });
     const { _id } = req.params;
-    const { designName } = req.body;
+    const { designName, categoryName } = req.body;
     const olderImage = req.body?.olderImage;
     const designImage = req.files?.designImage;
+    const { designImageJson } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(_id)) {
       return res.status(404).json({ error: "Can not find the document " });
@@ -89,7 +94,12 @@ export const updateDesign = async (req, res) => {
         );
         const update = await DesignModel.findOneAndUpdate(
           { _id: _id },
-          { designName: designName, designImage: result }, // Provide the updated categoryName
+          {
+            designName: designName,
+            categoryName: categoryName,
+            designImage: result,
+            designImageJson: JSON.parse(designImageJson),
+          }, // Provide the updated categoryName
           { new: true } // To return the updated document
         );
         if (!update) {
@@ -103,7 +113,12 @@ export const updateDesign = async (req, res) => {
     } else {
       const update = await DesignModel.findOneAndUpdate(
         { _id: _id },
-        { designName: designName, designImage: JSON.parse(olderImage) }, // Provide the updated categoryName
+        {
+          designName: designName,
+          categoryName: categoryName,
+          designImage: JSON.parse(olderImage),
+          designImageJson: designImageJson,
+        }, // Provide the updated categoryName
         { new: true } // To return the updated document
       );
       if (update) {

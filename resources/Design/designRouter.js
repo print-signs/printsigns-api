@@ -12,9 +12,7 @@ const router = express.Router();
 router
   .route("/add")
   .post(isAuthenticatedUser, authorizeRoles("admin"), addDesign);
-router
-  .route("/getDesigns")
-  .get(isAuthenticatedUser, authorizeRoles("admin"), getDesign);
+router.route("/getDesigns").get(isAuthenticatedUser, getDesign);
 router
   .route("/update/:_id")
   .patch(isAuthenticatedUser, authorizeRoles("admin"), updateDesign);
