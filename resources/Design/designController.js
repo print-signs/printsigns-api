@@ -47,8 +47,8 @@ export const addDesign = async (req, res) => {
 
 export const getDesign = async (req, res) => {
   try {
-    if (!req?.user) return res.status(400).json({ message: "please login !" });
-    const designs = await DesignModel.find({ addedBy: req.user._id }).sort({
+    // if (!req?.user) return res.status(400).json({ message: "please login !" });
+    const designs = await DesignModel.find().sort({
       createdAt: -1,
     });
 
