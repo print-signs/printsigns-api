@@ -42,12 +42,10 @@ export const addCategory = async (req, res) => {
 
 export const getCategories = async (req, res) => {
   try {
-    if (!req?.user) return res.status(400).json({ message: "please login !" });
-    const categories = await CategoryModel.find({ addedBy: req.user._id }).sort(
-      {
-        createdAt: -1,
-      }
-    );
+    // if (!req?.user) return res.status(400).json({ message: "please login !" });
+    const categories = await CategoryModel.find().sort({
+      createdAt: -1,
+    });
 
     if (!categories) {
       return res.status(404).json({ message: "No categories found" });

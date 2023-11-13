@@ -11,9 +11,7 @@ const router = express.Router();
 router
   .route("/add")
   .post(isAuthenticatedUser, authorizeRoles("admin"), addCategory);
-router
-  .route("/getCategories")
-  .get(isAuthenticatedUser, authorizeRoles("admin"), getCategories);
+router.route("/getCategories").get(getCategories);
 router
   .route("/update/:_id")
   .patch(isAuthenticatedUser, authorizeRoles("admin"), updateCategory);
