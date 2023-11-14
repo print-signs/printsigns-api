@@ -54,7 +54,7 @@ export const createProduct = async (req, res) => {
 //get All Product
 export const getAllProduct = async (req, res) => {
   try {
-    const product = await Product.find({ addedBy: req.user._id }).sort({
+    const product = await Product.find().sort({
       createdAt: -1,
     });
     if (product) {
@@ -225,6 +225,32 @@ export const deleteProduct = async (req, res) => {
       success: true,
       msg: "Product Deleted Successfully!!",
     });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      msg: error.message ? error.message : "Something went wrong!",
+    });
+  }
+};
+export const getProductsByCategory = async (req, res) => {
+  const { categoryName } = req.params; // Assuming category name is in the route
+
+  try {
+    const products = await Product.find({
+      category: categoryName,
+    }).sort({ createdAt: -1 });
+
+    if (products && products.length > 0) {
+      return res.status(200).json({
+        success: true,
+        products,
+      });
+    } else {
+      return res.status(404).json({
+        success: false,
+        msg: "No products found for this category",
+      });
+    }
   } catch (error) {
     res.status(500).json({
       success: false,

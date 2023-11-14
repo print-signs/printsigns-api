@@ -6,18 +6,15 @@ import {
   deleteProduct,
   getOneProduct,
   deleteImageFromCloudinary,
+  getProductsByCategory,
 } from "./ProductController.js";
 const router = express.Router();
 import { isAuthenticatedUser, authorizeRoles } from "../../middlewares/auth.js";
 router
   .route("/product/create/")
   .post(isAuthenticatedUser, authorizeRoles("admin"), createProduct);
-router
-  .route("/product/getAll/")
-  .get(isAuthenticatedUser, authorizeRoles("admin"), getAllProduct);
-router
-  .route("/product/getOne/:id")
-  .get(isAuthenticatedUser, authorizeRoles("admin"), getOneProduct);
+router.route("/product/getAll/").get(getAllProduct);
+router.route("/product/getOne/:id").get(getOneProduct);
 router
   .route("/product/update/:id")
   .patch(isAuthenticatedUser, authorizeRoles("admin"), updateProduct);
@@ -31,5 +28,5 @@ router
     authorizeRoles("admin"),
     deleteImageFromCloudinary
   );
-
+router.route("/products/category/:categoryName").get(getProductsByCategory);
 export default router;
