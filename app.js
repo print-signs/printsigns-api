@@ -51,6 +51,7 @@ import ConfigRouter from "./resources/setting/Configration/Config_routes.js";
 import TaxRouter from "./resources/Tax/tax_routes.js";
 //specialties
 import SpecialtiesRouter from "./resources/Specialties/SpecialtiesRoute.js";
+import ShippingAddressRoute from "./resources/ShippingAddresses/ShippingAddressRoute.js";
 
 //short urls
 // import ShortUrlRouter from "./resources/Businesses/Short_Urls/ShortUrlRoute.js";
@@ -68,9 +69,9 @@ app.use("/api/category", categoryRoute);
 // Content
 app.use("/api/content", ContentRoute);
 // User Address
-app.use("/api/user-address", UserAddressRoute);
+app.use("/api/shipping/address", ShippingAddressRoute);
 //Order
-app.use("/api", orderRoute);
+app.use("/api/order", orderRoute);
 //Departure
 app.use("/api/departure/", DepartureRouter);
 //Information
@@ -85,8 +86,7 @@ app.use("/api/state", StateRouter);
 app.use("/api/language", LanguageRoute);
 //Purpose
 app.use("/api/purpose", PurposeRoute);
-//Business_Type
-// app.use("/api/business", Business_TypeRoute);
+app.use("/api/business", orderRoute);
 //Tax
 app.use("/api/tax", TaxRouter);
 //config
