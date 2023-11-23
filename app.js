@@ -1,11 +1,14 @@
 import dotenv from "dotenv";
 import express from "express";
 const app = express();
+import path, { dirname, join } from "path";
+import { fileURLToPath } from "url";
 import bodyParser from "body-parser";
 import fileUpload from "express-fileupload"; // important pkg for file upload
 import cors from "cors";
 import cookieParser from "cookie-parser";
-
+// Design Router
+import designRoute from "./resources/Design/designRouter.js";
 // app.use(express.json({ limit: "50mb" }));
 // app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 app.use(cookieParser());
@@ -14,6 +17,15 @@ app.use(cookieParser());
 app.use(cors());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use("/api/design", designRoute);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Define the path to the public folder where static files are located
+const publicPath = join(__dirname, "public");
+
+// Serve static files from the 'public' directory
+app.use(express.static(publicPath));
 app.use(
   fileUpload({
     useTempFiles: true,
@@ -37,8 +49,7 @@ import StateRouter from "./resources/setting/state/state_routes.js";
 import LanguageRoute from "./resources/setting/Language/language_routes.js";
 //purpose
 import PurposeRoute from "./resources/setting/Purpose/Purpose_routes.js";
-// Design Router
-import designRoute from "./resources/Design/designRouter.js";
+
 // category Route
 import categoryRoute from "./resources/Category/categoryRoutes.js";
 import ContentRoute from "./resources/Content/ContentRoutes.js";
@@ -63,7 +74,7 @@ app.use("/api", ProductRouter);
 //businesses
 // app.use("/api/businesses", BusinessRoute);
 // Design
-app.use("/api/design", designRoute);
+
 // Category
 app.use("/api/category", categoryRoute);
 // Content
