@@ -82,6 +82,7 @@ app.use("/api/banner", bannerRoute);
 // Content
 app.use("/api/content", ContentRoute);
 // User Address
+app.use("/api/user-address", UserAddressRoute);
 app.use("/api/shipping/address", ShippingAddressRoute);
 //Order
 app.use("/api/order", orderRoute);

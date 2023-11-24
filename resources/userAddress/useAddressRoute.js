@@ -13,12 +13,8 @@ const router = express.Router();
 router
   .route("/addAddress")
   .post(isAuthenticatedUser, authorizeRoles("admin"), addUserAddress);
-router
-  .route("/getAddressess")
-  .get(isAuthenticatedUser, authorizeRoles("admin"), getUserAddress);
-router
-  .route("/getOneAddress/:_id")
-  .get(isAuthenticatedUser, authorizeRoles("admin"), getOneAddress);
+router.route("/getAddressess").get(getUserAddress);
+router.route("/getOneAddress/:_id").get(getOneAddress);
 router
   .route("/updateAddress/:_id")
   .patch(isAuthenticatedUser, authorizeRoles("admin"), updateAddress);
