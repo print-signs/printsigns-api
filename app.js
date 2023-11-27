@@ -52,6 +52,7 @@ import PurposeRoute from "./resources/setting/Purpose/Purpose_routes.js";
 
 // category Route
 import categoryRoute from "./resources/Category/categoryRoutes.js";
+import bannerRoute from "./resources/Banner/BannerRouter.js";
 import ContentRoute from "./resources/Content/ContentRoutes.js";
 import UserAddressRoute from "./resources/userAddress/useAddressRoute.js";
 //business_Type
@@ -77,9 +78,11 @@ app.use("/api", ProductRouter);
 
 // Category
 app.use("/api/category", categoryRoute);
+app.use("/api/banner", bannerRoute);
 // Content
 app.use("/api/content", ContentRoute);
 // User Address
+app.use("/api/user-address", UserAddressRoute);
 app.use("/api/shipping/address", ShippingAddressRoute);
 //Order
 app.use("/api/order", orderRoute);

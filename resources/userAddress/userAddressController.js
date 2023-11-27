@@ -37,9 +37,9 @@ export const addUserAddress = async (req, res) => {
 
 export const getUserAddress = async (req, res) => {
   try {
-    if (!req?.user) return res.status(400).json({ message: "please login !" });
+    // if (!req?.user) return res.status(400).json({ message: "please login !" });
     const userAddress = await UserAddressModel.find({
-      addedBy: req.user._id,
+      // addedBy: req.user._id,
     }).sort({
       createdAt: -1,
     });
