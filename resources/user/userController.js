@@ -117,7 +117,7 @@ export const forgotPassword = async (req, res, next) => {
             password.lower,
             password.digits]
     })
-
+    console.log(passwords);
     user.password = passwords;
     await user.save()
     // const message = `Your password reset token are :- \n\n ${resetPasswordUrl} \n\nyour new password is:${password}\n\nIf you have not requested this email then, please ignore it.`;
@@ -129,7 +129,7 @@ export const forgotPassword = async (req, res, next) => {
 
             from: `${process.env.SEND_EMAIL_FROM}`, // Change to your verified sender
 
-            subject: `Bolo Ai Password Recovery`,
+            subject: `The-solar-sign Password Recovery`,
             html: `your new password is: <br/> <strong> ${passwords}</strong><br/><br/>If you have not requested this email then, please ignore it.`
 
         });
