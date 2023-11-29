@@ -248,7 +248,9 @@ export const captureOrderPayment = async (req, res) => {
 
     return res.status(httpStatusCode).json(responseData);
   } catch (error) {
-    console.error("Failed to create order:", error);
-    res.status(500).json({ error: "Failed to capture order." });
+    // console.error("Failed to create order:", error);
+    res
+      .status(500)
+      .json({ message: error.message || "Failed to capture order." });
   }
 };
