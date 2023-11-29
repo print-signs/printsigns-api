@@ -22,15 +22,15 @@ router.route("/user/self").get(isAuthenticatedUser, getUserSelf);
 
 //admin route
 router
-  .route("/order/getAll")
+  .route("/getAll/:status")
   .get(isAuthenticatedUser, authorizeRoles("admin"), getAllOrder);
-router.route("/order/getOne/:id").get(isAuthenticatedUser, getSingleOrder);
+router.route("/getOne/:id").get(isAuthenticatedUser, getSingleOrder);
 // router
 //   .route("/order/edit/:id")
 //   .put(isAuthenticatedUser, authorizeRoles("admin"), EditOrderBeforePayment);
 
 router
-  .route("/order/delete/:id")
+  .route("/delete/:id")
   .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteOneOrder);
 
 // router.route("/product/getAll/").get(getAllProduct)

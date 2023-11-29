@@ -2,8 +2,10 @@ import { Order } from "./orderModel.js";
 
 export const getAllOrder = async (req, res) => {
   try {
+    const { status } = req.params;
     const order = await Order.find({
       payment_status: { $in: ["success", "failed"] },
+      // orderStatus: status,
     })
       .populate({
         path: "user",
@@ -47,11 +49,6 @@ export const getSingleOrder = async (req, res) => {
       })
       .populate({
         path: "shippingInfo",
-
-        populate: {
-          path: "Franchisee",
-          select: "banner price_Lable ",
-        },
       })
       .sort({ createdAt: -1 });
     if (order) {
