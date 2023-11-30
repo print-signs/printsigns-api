@@ -42,7 +42,7 @@ export const getSingleOrder = async (req, res) => {
     if (!req.params.id)
       return res.status(400).json({ message: "please Provide Order Id" });
 
-    const order = await Order.findById(req.params.id)
+    const order = await Order.findOne({ orderID: req.params.id })
       .populate({
         path: "user",
         select: "name -_id",
