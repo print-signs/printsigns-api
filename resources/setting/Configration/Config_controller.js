@@ -4,23 +4,19 @@ import cloudinary from "../../../Utils/cloudinary.js";
 //Add app Name
 
 export const addApplicationName = async (req, res) => {
-
-
   try {
-    if (req.body === '') {
+    if (req.body === "") {
       return res.status(201).json({
         status: "false",
         message: "please enter application  Name",
       });
     }
-    const { appName } =
-      req.body;
+    const { appName } = req.body;
 
-
-    const applicationNam = await Config.find()
+    const applicationNam = await Config.find();
     if (applicationNam.length === 0) {
       const applicationName = await Config.create({
-        appName
+        appName,
       });
 
       if (applicationName) {
@@ -31,13 +27,8 @@ export const addApplicationName = async (req, res) => {
       }
     } else {
       const updateApp = await Config.updateOne({
-
-        appName:
-          appName
-
-
-      }
-      );
+        appName: appName,
+      });
 
       if (updateApp) {
         return res.status(200).json({
@@ -53,23 +44,19 @@ export const addApplicationName = async (req, res) => {
 
 //add copyright msg
 export const addCopyRightMessage = async (req, res) => {
-
-
   try {
-    if (req.body === '') {
+    if (req.body === "") {
       return res.status(201).json({
         status: "false",
         message: "please enter CopyRight Message",
       });
     }
-    const { copyright } =
-      req.body;
+    const { copyright } = req.body;
 
-
-    const application = await Config.find()
+    const application = await Config.find();
     if (application.length === 0) {
       const applicationName = await Config.create({
-        copyrightMessage: copyright
+        copyrightMessage: copyright,
       });
 
       if (applicationName) {
@@ -80,13 +67,8 @@ export const addCopyRightMessage = async (req, res) => {
       }
     } else {
       const updateApp = await Config.updateOne({
-
-        copyrightMessage:
-          copyright
-
-
-      }
-      );
+        copyrightMessage: copyright,
+      });
 
       if (updateApp) {
         return res.status(200).json({
@@ -177,9 +159,8 @@ const addAddress = async (req, res) => {
     website,
     contact,
     email,
-    gstin,
   } = req.body;
-  console.log(req.body);
+
   if (
     !company ||
     !address ||
@@ -188,8 +169,7 @@ const addAddress = async (req, res) => {
     !country ||
     !pincode ||
     !contact ||
-    !email ||
-    !gstin
+    !email
   ) {
     return res.status(400).json({
       status: "failed",
@@ -210,7 +190,6 @@ const addAddress = async (req, res) => {
           website,
           contact,
           email,
-          gstin,
         },
       });
 
@@ -235,7 +214,6 @@ const addAddress = async (req, res) => {
               website,
               contact,
               email,
-              gstin,
             },
           },
         }
@@ -274,17 +252,13 @@ const addLogo = async (req, res) => {
   try {
     const configuration = await Config.find();
 
-
     // console.log(req.files);
 
-
-    let result1
-    let result2
-    let result3
+    let result1;
+    let result2;
+    let result3;
     // console.log(req.files.Headerlogo)
     if (req.files.Headerlogo) {
-
-
       const result = await cloudinary.v2.uploader.upload(
         req.files.Headerlogo.tempFilePath,
         { folder: "bolo/Logo" }
@@ -327,8 +301,6 @@ const addLogo = async (req, res) => {
         });
       }
     } else {
-
-
       const updateLogo = await Config.updateOne(
         {},
         {
