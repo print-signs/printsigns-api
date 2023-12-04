@@ -29,12 +29,10 @@ export const AddTermsAndConditions = async (req, res) => {
 
 export const getTermsAndCondition = async (req, res) => {
   try {
-    if (!req?.user) return res.status(400).json({ message: "please login !" });
+    // if (!req?.user) return res.status(400).json({ message: "please login !" });
     // console.log(req?.user)
 
-    const termsAndCondition = await TermsAndCondition.find({
-      addedBy: req.user._id,
-    });
+    const termsAndCondition = await TermsAndCondition.find();
 
     res.status(200).json({
       success: true,
@@ -105,12 +103,10 @@ export const AddPrivacyAndPolicy = async (req, res) => {
 
 export const getPrivacyPolicy = async (req, res) => {
   try {
-    if (!req?.user) return res.status(400).json({ message: "please login !" });
+    // if (!req?.user) return res.status(400).json({ message: "please login !" });
     // console.log(req?.user)
 
-    const privacyAndPolicy = await PrivacyAndPolicy.find({
-      addedBy: req.user._id,
-    });
+    const privacyAndPolicy = await PrivacyAndPolicy.find();
 
     res.status(200).json({
       success: true,
@@ -181,12 +177,10 @@ export const AddShipping = async (req, res) => {
 
 export const getShipping = async (req, res) => {
   try {
-    if (!req?.user) return res.status(400).json({ message: "please login !" });
+    // if (!req?.user) return res.status(400).json({ message: "please login !" });
     // console.log(req?.user)
 
-    const shipping = await Shipping.find({
-      addedBy: req.user._id,
-    });
+    const shipping = await Shipping.find();
 
     res.status(200).json({
       success: true,
