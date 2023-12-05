@@ -159,6 +159,8 @@ const addAddress = async (req, res) => {
     website,
     contact,
     email,
+    longitude,
+    latitude,
   } = req.body;
 
   if (
@@ -190,6 +192,8 @@ const addAddress = async (req, res) => {
           website,
           contact,
           email,
+          longitude,
+          latitude,
         },
       });
 
@@ -214,6 +218,8 @@ const addAddress = async (req, res) => {
               website,
               contact,
               email,
+              longitude,
+              latitude,
             },
           },
         }
