@@ -19,7 +19,7 @@ router
   .post(isAuthenticatedUser, authorizeRoles("admin"), AddTermsAndConditions);
 router
   .route("/terms-and-conditions")
-  .get(isAuthenticatedUser, authorizeRoles("admin"), getTermsAndCondition);
+  .get(getTermsAndCondition);
 router
   .route("/terms-and-condition-update")
   .patch(
@@ -32,7 +32,7 @@ router
   .post(isAuthenticatedUser, authorizeRoles("admin"), AddPrivacyAndPolicy);
 router
   .route("/privacy-and-policy")
-  .get(isAuthenticatedUser, authorizeRoles("admin"), getPrivacyPolicy);
+  .get(getPrivacyPolicy);
 router
   .route("/privacy-and-policy-update")
   .patch(isAuthenticatedUser, authorizeRoles("admin"), updatePrivacyPolicy);
@@ -42,7 +42,7 @@ router
   .post(isAuthenticatedUser, authorizeRoles("admin"), AddShipping);
 router
   .route("/shipping-and-policy")
-  .get(isAuthenticatedUser, authorizeRoles("admin"), getShipping);
+  .get(getShipping);
 router
   .route("/shipping-and-policy-update")
   .patch(isAuthenticatedUser, authorizeRoles("admin"), updateShipping);
