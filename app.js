@@ -53,6 +53,9 @@ import PurposeRoute from "./resources/setting/Purpose/Purpose_routes.js";
 // category Route
 import categoryRoute from "./resources/Category/categoryRoutes.js";
 import bannerRoute from "./resources/Banner/BannerRouter.js";
+import RegistrationImageRoute from './resources/RegistrationImage/RegistrationImageRoute.js';
+import loginImageRoute from './resources/LoginImage/LoginImageRoute.js'
+import shopImageRoute from './resources/ShopPageImage/ShopPageImageRoute.js'
 import ContentRoute from "./resources/Content/ContentRoutes.js";
 import UserAddressRoute from "./resources/userAddress/useAddressRoute.js";
 //business_Type
@@ -79,6 +82,10 @@ app.use("/api", ProductRouter);
 // Category
 app.use("/api/category", categoryRoute);
 app.use("/api/banner", bannerRoute);
+// registration image
+app.use('/api/registerImage', RegistrationImageRoute)
+app.use('/api/loginImage', loginImageRoute)
+app.use('/api/shopImage', shopImageRoute)
 // Content
 app.use("/api/content", ContentRoute);
 // User Address
