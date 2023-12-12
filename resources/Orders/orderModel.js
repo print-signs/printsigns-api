@@ -131,6 +131,8 @@ const orderSchema = new mongoose.Schema(
     // paypal_signature: { type: String },
     // order_used: { type: Boolean, default: false },
     isDelivered: { type: Boolean, required: true, default: false },
+    DeliveredDate: { type: String, default: "" },
+
     // deliveredAt: { type: Date },
     status_timeline: {
       new: { type: Date },
@@ -141,7 +143,7 @@ const orderSchema = new mongoose.Schema(
       returned: { type: Date },
     },
     courier_name: { type: String },
-    tracking_id: { type: String },
+    courier_tracking_id: { type: String },
   },
   { timestamps: true }
 );

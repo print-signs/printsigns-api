@@ -13,14 +13,14 @@ export const getAllOrder = async (req, res) => {
         select: "name -_id",
       })
       .populate({
-        path: "shippingInfo",
+        path: "shippingInfo.addressId",
 
         // populate: {
         //   path: "Franchisee",
         //   select: "banner price_Lable ",
         // },
       })
-      .sort({ createdAt: -1 });
+      .sort({ updatedAt: -1 });
     if (order) {
       res.status(201).json({
         success: true,
@@ -47,7 +47,7 @@ export const getSingleOrder = async (req, res) => {
         select: "name -_id",
       })
       .populate({
-        path: "shippingInfo",
+        path: "shippingInfo.addressId",
       })
       .sort({ createdAt: -1 });
     if (order) {
@@ -72,7 +72,7 @@ export const getUserSelf = async (req, res) => {
       user: req.user._id,
       payment_status: "success",
     })
-      .populate("shippingInfo")
+      .populate("shippingInfo.addressId")
       .sort({ createdAt: -1 });
     if (order) {
       return res.status(200).json({
@@ -147,13 +147,27 @@ export const updateOrderStatusById = async (req, res) => {
     //     { status: body.status, "status_timeline.delivered": currentDate }
     //   );
     // }
-
-    await Order.findByIdAndUpdate(order._id, body);
-    // console.log(order);
-
-    res
-      .status(200)
-      .json({ status: "ok", message: "Order status updated successfully!" });
+    if (req.body.status === "dispatched") {
+      body["courier_name"] = req.body.courierName;
+      body["courier_tracking_id"] = req.body.TrackingID;
+      await Order.findByIdAndUpdate(order._id, body);
+      return res
+        .status(200)
+        .json({ status: "ok", message: "Order status updated successfully!" });
+    } else if (req.body.status === "delivered") {
+      body["isDelivered"] = true;
+      body["DeliveredDate"] = req.body.DDate;
+      await Order.findByIdAndUpdate(order._id, body);
+      return res
+        .status(200)
+        .json({ status: "ok", message: "Order status updated successfully!" });
+    } else {
+      await Order.findByIdAndUpdate(order._id, body);
+      // console.log(order);
+      res
+        .status(200)
+        .json({ status: "ok", message: "Order status updated successfully!" });
+    }
   } catch (error) {
     console.log(error);
     res
