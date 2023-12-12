@@ -13,9 +13,48 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
     shippingInfo: {
-      type: mongoose.Schema.ObjectId,
-      ref: "ShippingAddress",
-      required: true,
+      first_Name: {
+        type: String,
+        required: true,
+      },
+      last_Name: {
+        type: String,
+        required: true,
+      },
+      phone_Number: {
+        type: Number,
+        required: true,
+      },
+      street: {
+        type: String,
+        required: true,
+      },
+      city: {
+        type: String,
+        required: true,
+        trim: true,
+      },
+      state: {
+        type: String,
+        required: true,
+      },
+      postalCode: {
+        type: String,
+        required: true,
+        trim: true,
+        // Add a regular expression to enforce a specific postal code format
+        // For example, assuming a 5-digit format for the United States
+        match: /^\d{5}$/,
+      },
+      country: {
+        type: String,
+        required: true,
+      },
+      addressId: {
+        type: mongoose.Schema.ObjectId,
+        ref: "ShippingAddress",
+        required: true,
+      },
     },
     orderItems: [
       {
@@ -91,7 +130,7 @@ const orderSchema = new mongoose.Schema(
     paypal_payment_id: { type: String },
     // paypal_signature: { type: String },
     // order_used: { type: Boolean, default: false },
-    // isDelivered: { type: Boolean,required:true,default:false },
+    isDelivered: { type: Boolean, required: true, default: false },
     // deliveredAt: { type: Date },
     status_timeline: {
       new: { type: Date },
@@ -101,8 +140,8 @@ const orderSchema = new mongoose.Schema(
       cancelled: { type: Date },
       returned: { type: Date },
     },
-    // courier_name: { type: String },
-    // tracking_id: { type: String },
+    courier_name: { type: String },
+    tracking_id: { type: String },
   },
   { timestamps: true }
 );

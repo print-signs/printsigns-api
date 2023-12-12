@@ -3,6 +3,7 @@ const { PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET } = process.env;
 const base = "https://api-m.sandbox.paypal.com";
 import axios from "axios";
 import mongoose from "mongoose";
+import { shippingAddress } from "../ShippingAddresses/ShippingAddressModel.js";
 //paypal client id get
 export const getClientId = async (req, res) => {
   try {
@@ -107,13 +108,25 @@ export const createOrderCheckout = async (req, res) => {
       price_With_Tax: 0,
       taxId: "",
     }));
+    let addss = await shippingAddress.findById(address);
+    let shipping = {
+      first_Name: addss.first_Name,
+      last_Name: addss.last_Name,
+      phone_Number: addss.phone_Number,
+      street: addss.street,
+      city: addss.city,
+      state: addss.state,
+      postalCode: addss?.postalCode,
+      country: addss.country,
+      addressId: address,
+    };
     req.body.user = req.user._id;
     const Id = await generateOrderId();
     const order = await Order.create({
       orderID: Id,
       total_amount: subtotal,
       orderItems,
-      shippingInfo: address,
+      shippingInfo: shipping,
       user: req.user._id,
     });
     if (order) {

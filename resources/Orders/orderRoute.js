@@ -3,6 +3,7 @@ import {
   getAllOrder,
   getSingleOrder,
   getUserSelf,
+  updateOrderStatusById,
 } from "./orderController.js";
 import { isAuthenticatedUser, authorizeRoles } from "../../middlewares/auth.js";
 import express from "express";
@@ -25,9 +26,7 @@ router
   .route("/getAll/:status")
   .get(isAuthenticatedUser, authorizeRoles("admin"), getAllOrder);
 router.route("/getOne/:id").get(isAuthenticatedUser, getSingleOrder);
-// router
-//   .route("/order/edit/:id")
-//   .put(isAuthenticatedUser, authorizeRoles("admin"), EditOrderBeforePayment);
+router.route("/change/status/:id").patch(updateOrderStatusById);
 
 router
   .route("/delete/:id")
